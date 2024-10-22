@@ -1,6 +1,8 @@
 package org.example.view;
 import org.example.controller.AmenitieController;
 import org.example.model.Amenitie;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,46 +36,39 @@ public class AmenitieView {
         }
     }
 
-    public Amenitie seleccionarAmenitie() {
+    public List<Amenitie> seleccionarAmenitie() {
         System.out.println("Seleccionar Amenitie");
-        Amenitie amenitie = null;
-        boolean amenitieExiste = false;
+        List<Amenitie> amenitieSeleccionadoList = new ArrayList<>();
 
-        while (!amenitieExiste) {
+        Amenitie amenitie = null;
+        boolean salir = false;
+
+        while (!salir) {
             System.out.println("Ingrese Amenitie: ");
             List<Amenitie> amenitieList = this.amenitieController.getAllAmenitie();
             for (int i = 0; i < amenitieList.size(); i++) {
                 System.out.println((i + 1) + " - " + amenitieList.get(i).getNombre());
             }
+            System.out.println("0 - Salir");
 
             int idAmenitie = Integer.parseInt(scanner.nextLine()) - 1;
 
-            for (int i = 0; i < amenitieList.size(); i++) {
-                if (idAmenitie == i) {
-                    amenitie = amenitieController.getAmenitieById(amenitieList.get(i).getIdAmenitie());
-                    if (amenitie != null) {
-                        amenitieExiste = true;
+            if (idAmenitie == 0) {
+                salir = true;
+            } else {
+                for (int i = 0; i < amenitieList.size(); i++) {
+                    if (idAmenitie == i) {
+                        amenitie = amenitieController.getAmenitieById(amenitieList.get(i).getIdAmenitie());
+                        if (amenitie != null) {
+                            amenitieSeleccionadoList.add(amenitie);
+                        }
                     }
                 }
-            }
-            if (!amenitieExiste) {
-                System.out.println("No se encontró Amenitie.");
-                System.out.println("1 - Volver a buscar.");
-                System.out.println("2 - Salir.");
-                String opcion = scanner.nextLine();
-
-                switch (opcion) {
-                    case "1":
-                        break;
-                    case "2":
-                        amenitieExiste = true;
-                        break;
-                    default:
-                        System.out.println("Opción no válida, ingrese una opción válida.");
-                        break;
+                if (amenitie == null) {
+                    System.out.println("No se encontró Amenitie.");
                 }
             }
         }
-        return amenitie;
+        return amenitieSeleccionadoList;
     }
 }

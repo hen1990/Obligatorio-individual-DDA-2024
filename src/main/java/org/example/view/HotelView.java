@@ -1,10 +1,15 @@
 package org.example.view;
 
 import org.example.controller.CiudadController;
+import org.example.controller.HabitacionController;
 import org.example.controller.HotelController;
 import org.example.model.Ciudad;
+import org.example.model.Habitacion;
 import org.example.model.Hotel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,6 +18,7 @@ public class HotelView {
     private final HotelController hotelController = new HotelController();
     private final CiudadController ciudadController = new CiudadController();
     private final CiudadView ciudadView = new CiudadView();
+    private final HabitacionController habitacionController = new HabitacionController();
 
     public void hotel() {
         boolean volver = false;
@@ -349,12 +355,22 @@ public class HotelView {
             System.out.println("1 - Para hoy.");
             System.out.println("2 - Ingresar fecha.");
             String opcion = scanner.nextLine();
+            List<Habitacion> habitacionList = new ArrayList<>();
 
             switch (opcion) {
                 case "1":
-                    buscarHabitacionDisponible();
+                    LocalDate fechaActual = LocalDate.now();
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String fechaFormateada = fechaActual.format(formato);
+                    String Salida = "";
+                    habitacionList = habitacionController.habitacionDisponiblePorHotel(fechaFormateada, Salida);
                     break;
                 case "2":
+                    System.out.println("Ingrese fecha de ingreso(aaaa-mm-dd): ");
+                    String fechaInicio = scanner.nextLine();
+                    System.out.println("Ingrese fecha de salida(aaaa-mm-dd): ");
+                    String fechaSalida = scanner.nextLine();
+                    habitacionList = habitacionController.habitacionDisponiblePorHotel(fechaInicio, fechaSalida);
                     break;
                 default:
                     System.out.println("Opción no válida.");
@@ -405,7 +421,7 @@ public class HotelView {
 
             switch (opcion) {
                 case "1":
-                    buscarHabitacionDisponible();
+                    //buscarHabitacionDisponible();
                     break;
                 case "2":
                     break;
@@ -462,7 +478,7 @@ public class HotelView {
 
             switch (opcion) {
                 case "1":
-                    buscarHabitacionDisponible();
+                    //buscarHabitacionDisponible();
                     break;
                 case "2":
                     break;

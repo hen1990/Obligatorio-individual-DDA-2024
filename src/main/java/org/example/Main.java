@@ -1,8 +1,12 @@
 package org.example;
+import org.example.controller.AmenitieController;
+import org.example.model.Amenitie;
 import org.example.view.CiudadView;
 import org.example.view.HotelView;
 import org.example.view.HuespedView;
 import org.example.view.PaisView;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -11,6 +15,7 @@ public class Main {
     public static CiudadView ciudadView = new CiudadView();
     public static HotelView hotelView = new HotelView();
     public static HuespedView huespedView = new HuespedView();
+    public static AmenitieController amenitieController = new AmenitieController();
 
     public static void main(String[] args) {
 
@@ -20,7 +25,8 @@ public class Main {
             System.out.println("INICIO");
             System.out.println("1 - Gestionar Hotel.");
             System.out.println("2 - Gestionar Huesped.");
-            System.out.println("3 - Modificar un Hotel.");
+            System.out.println("3 - Amenities.");
+            System.out.println("4 - Todos los Amenities.");
 
             System.out.println("11 - Ver Paices.");
             System.out.println("12 - Ver un Pais.");
@@ -40,7 +46,10 @@ public class Main {
                     gestionarHuesped();
                     break;
                 case "3":
-
+                    getAmenitieById();
+                    break;
+                case "4":
+                    getAllAmenitie();
                     break;
                 case "11":
                     getAllPais();
@@ -66,7 +75,7 @@ public class Main {
         }
     }
 
-    //Pais_____________________________________________________________________________________________________
+    //Pais______________________________________________________________________________________________________________
     private static void getAllPais() {
         paisView.getAllPais();
         esperarEnter();
@@ -77,7 +86,7 @@ public class Main {
         esperarEnter();
     }
 
-    //Ciudad_____________________________________________________________________________________________________
+    //Ciudad____________________________________________________________________________________________________________
     private static void getAllCiudad() {
         ciudadView.getAllCiudad();
         esperarEnter();
@@ -88,17 +97,36 @@ public class Main {
         esperarEnter();
     }
 
-    //Hotel_____________________________________________________________________________________________________
+    //Hotel_____________________________________________________________________________________________________________
     private static void gestionarHotel() {
         limpiarConsola();
         hotelView.hotel();
         esperarEnter();
     }
 
-    //Hotel_____________________________________________________________________________________________________
+    //Hotel_____________________________________________________________________________________________________________
     private static void gestionarHuesped() {
         limpiarConsola();
         huespedView.huesped();
+        esperarEnter();
+    }
+
+    //Amenities_________________________________________________________________________________________________________
+    private static void getAmenitieById(){
+        limpiarConsola();
+        System.out.println("Id amenitie");
+        int idAmenitie = Integer.parseInt(scanner.nextLine());
+        Amenitie amenitie = amenitieController.getAmenitieById(idAmenitie);
+        System.out.println(amenitie.getNombre());
+        esperarEnter();
+    }
+
+    private static void getAllAmenitie(){
+        limpiarConsola();
+        List<Amenitie> amenitieList = amenitieController.getAllAmenitie();
+        for (Amenitie amenitie : amenitieList) {
+            System.out.println(amenitie.getNombre());
+        }
         esperarEnter();
     }
 

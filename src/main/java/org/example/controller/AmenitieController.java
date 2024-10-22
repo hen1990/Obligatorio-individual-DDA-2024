@@ -11,7 +11,6 @@ public class AmenitieController {
     }
 
     public List<Amenitie> getAllAmenitie(){
-
         return this.amenitieDAO.getAllAmenitie();
     }
 }
