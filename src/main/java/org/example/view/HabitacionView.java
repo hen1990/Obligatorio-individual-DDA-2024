@@ -1,6 +1,12 @@
 package org.example.view;
+import org.example.controller.AmenitieController;
 import org.example.controller.HabitacionController;
+import org.example.controller.HotelController;
+import org.example.controller.TipoHabitacionController;
+import org.example.model.Amenitie;
 import org.example.model.Habitacion;
+import org.example.model.Hotel;
+import org.example.model.TipoHabitacion;
 
 import java.util.List;
 import java.util.Scanner;
@@ -8,7 +14,53 @@ import java.util.Scanner;
 public class HabitacionView {
     Scanner scanner = new Scanner(System.in);
     HabitacionController habitacionController = new HabitacionController();
+    TipoHabitacionController tipoHabitacionController = new TipoHabitacionController();
+    HotelController hotelController = new HotelController();
+    AmenitieController amenitieController = new AmenitieController();
 
+    public void ingresarHabitacion() {
+        System.out.println("Ingrese número de Habitación: ");
+        int numHabitacion = Integer.parseInt(scanner.nextLine());
+        System.out.println("Ingrese cantidad de camas individuales: ");
+        int camaSimple = Integer.parseInt(scanner.nextLine());
+        System.out.println("Ingrese cantidad de camas Dobles:");
+        int camaDoble = Integer.parseInt(scanner.nextLine());
+        System.out.println("Seleccione Tipo d Habitación: ");
+
+        List<TipoHabitacion> tipoHabitacionList = tipoHabitacionController.getAllTipoHabitacion();
+        for (int i = 0; i < tipoHabitacionList.size(); i++) {
+            System.out.println((i+1) + tipoHabitacionList.get(i).getTipo());
+        }
+
+        int idTipoHabitacion = Integer.parseInt(scanner.nextLine());
+        TipoHabitacion tipoHabitacion = null;
+
+        for (int i = 0; i < tipoHabitacionList.size(); i++) {
+            if (idTipoHabitacion == i) {
+                tipoHabitacion = tipoHabitacionController.getTipoHabitacionById(idTipoHabitacion);
+            }
+        }
+
+        System.out.println("Seleccione Hotel: ");
+
+        List<Hotel> hotelList = hotelController.getAllHotel();
+        for (int i = 0; i < hotelList.size(); i++) {
+            System.out.println((i+1) + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
+        }
+
+        int idHotel = Integer.parseInt(scanner.nextLine()) -1;
+
+        Hotel hotel = null;
+        for (int i = 0; i < hotelList.size(); i++) {
+            if (idHotel == i) {
+                hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
+            }
+        }
+
+        System.out.println("Seleccione Amenities: ");
+        List<Amenitie> amenitieList = amenitieController.getAllAmenitie();
+
+    }
 
     public void getHabitacionById() {
         try {

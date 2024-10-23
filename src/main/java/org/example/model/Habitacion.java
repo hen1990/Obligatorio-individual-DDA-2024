@@ -29,7 +29,6 @@ public class Habitacion {
         this.numHabitacion = numHabitacion;
         this.camasSimple = camasSimple;
         this.camasDoble = camasDoble;
-        this.ocupada = ocupada;
         this.hotel = hotel;
         this.tipoHabitacion = tipoHabitacion;
     }

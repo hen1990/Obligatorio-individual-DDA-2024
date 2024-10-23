@@ -3,16 +3,14 @@ package org.example.model;
 public class TipoHabitacion {
     private int idTipoHabitacion;
     private String tipo;
-    private Tarifa tarifa;  // Cambiado de idTarifa a Tarifa
+    private Tarifa tarifa;
 
-    // Constructor
     public TipoHabitacion(int idTipoHabitacion, String tipo) {
         this.idTipoHabitacion = idTipoHabitacion;
         this.tipo = tipo;
         //this.tarifa = tarifa;
     }
 
-    // Getters y Setters
     public int getIdTipoHabitacion() { return idTipoHabitacion; }
     public void setIdTipoHabitacion(int idTipoHabitacion) { this.idTipoHabitacion = idTipoHabitacion; }
 
