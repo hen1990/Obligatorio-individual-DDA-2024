@@ -5,10 +5,10 @@ public class TipoHabitacion {
     private String tipo;
     private Tarifa tarifa;
 
-    public TipoHabitacion(int idTipoHabitacion, String tipo) {
+    public TipoHabitacion(int idTipoHabitacion, String tipo, Tarifa tarifa) {
         this.idTipoHabitacion = idTipoHabitacion;
         this.tipo = tipo;
-        //this.tarifa = tarifa;
+        this.tarifa = tarifa;
     }
 
     public int getIdTipoHabitacion() { return idTipoHabitacion; }

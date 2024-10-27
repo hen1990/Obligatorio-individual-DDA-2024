@@ -13,4 +13,8 @@ public class AmenitieController {
     public List<Amenitie> getAllAmenitie(){
         return this.amenitieDAO.getAllAmenitie();
     }
+
+    public List<Amenitie> getAmenitieByHabitacion(int idHabitacion){
+        return this.amenitieDAO.getAmenitieByHabitacion(idHabitacion);
+    }
 }

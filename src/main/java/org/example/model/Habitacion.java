@@ -10,8 +10,8 @@ public class Habitacion {
     private int camasSimple;
     private int camasDoble;
     private boolean ocupada;
-    private Hotel hotel;  // Cambiado de idHotel a Hotel
-    private TipoHabitacion tipoHabitacion;  // Cambiado de idTipoHabitacion a TipoHabitacion
+    private Hotel hotel;
+    private TipoHabitacion tipoHabitacion;
     private List<Amenitie> amenitieList = new ArrayList<>();
 
     // Constructor
@@ -55,4 +55,7 @@ public class Habitacion {
 
     public TipoHabitacion getTipoHabitacion() { return tipoHabitacion; }
     public void setTipoHabitacion(TipoHabitacion tipoHabitacion) { this.tipoHabitacion = tipoHabitacion; }
+
+    public List<Amenitie> getAmenitieList() { return amenitieList; }
+    public void setAmenitieList(List<Amenitie> amenitieList) { this.amenitieList = amenitieList; }
 }

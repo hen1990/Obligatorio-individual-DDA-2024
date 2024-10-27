@@ -14,6 +14,12 @@ public class Tarifa {
         this.monto = monto;
     }
 
+    public Tarifa(String fechaInicio, String fechaFin, double monto) {
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.monto = monto;
+    }
+
     // Getters y Setters
     public int getIdTarifa() { return idTarifa; }
     public void setIdTarifa(int idTarifa) { this.idTarifa = idTarifa; }

@@ -112,7 +112,7 @@ public class HotelDAO {
     }
 
     public List<Hotel> getHotelByEstrellas(int buscarEstrellas){
-        String query = "SELECT * FROM Hotel WHERE idCiudad = ?";
+        String query = "SELECT * FROM Hotel WHERE estrellas >= ?";
 
         ResultSet resultSet = connectionDAO.executeQuery(query, buscarEstrellas);
         List<Hotel> hotelList = new ArrayList<>();

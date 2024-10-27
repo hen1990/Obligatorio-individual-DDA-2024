@@ -1,0 +1,94 @@
+package org.example.DAO;
+import org.example.controller.HabitacionController;
+import org.example.controller.HuespedController;
+import org.example.model.Habitacion;
+import org.example.model.Huesped;
+import org.example.model.Reserva;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ReservaDAO {
+    private final ConnectionDAO connectionDAO = new ConnectionDAO();
+    HuespedController huespedController = new HuespedController();
+    HabitacionController habitacionController = new HabitacionController();
+
+    public boolean insertReserva(Reserva reserva) {
+        String query = "INSERT INTO Reserva (" +
+                " cantidad_personas," +
+                " fecha_reserva," +
+                " tarifa," +
+                " fecha_inicio," +
+                " fecha_fin," +
+                " idHabitacion," +
+                " idHuesped)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        return connectionDAO.executeUpdate(query,
+                reserva.getCantidadPersonas(),
+                reserva.getFechaReserva(),
+                reserva.getTarifa(),
+                reserva.getFechaInicio(),
+                reserva.getFechaFin(),
+                reserva.getHabitacion().getIdHabitacion(),
+                reserva.getHuesped().getIdHuesped());
+    }
+
+    public Reserva getReservaById(int idReserva) {
+        String query = "SELECT * FROM Reserva WHERE idReserva = ?";
+        ResultSet resultSet = connectionDAO.executeQuery(query, idReserva);
+
+        try {
+            if (resultSet.next()) {
+                int cantidadPersonas = resultSet.getInt("cantidad_personas");
+                String fechaReserva = resultSet.getString("fecha_reserva");
+                double monto = resultSet.getDouble("tarifa");
+                String fechaInicio = resultSet.getString("fecha_inicio");
+                String fechaFin = resultSet.getString("fecha_fin");
+                int idHabitacion = resultSet.getInt("idHabitacion");
+                int idHuesped = resultSet.getInt("idHuesped");
+
+                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
+                Huesped huesped = huespedController.getHuespedById(idHuesped);
+                return new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public List<Reserva> getAllReserva(){
+        String query = "SELECT * FROM Reserva";
+        ResultSet resultSet = connectionDAO.executeQuery(query);
+        List<Reserva> reservaList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                int idReserva = resultSet.getInt("idReserva");
+                int cantidadPersonas = resultSet.getInt("cantidad_personas");
+                String fechaReserva = resultSet.getString("fecha_reserva");
+                double monto = resultSet.getDouble("tarifa");
+                String fechaInicio = resultSet.getString("fecha_inicio");
+                String fechaFin = resultSet.getString("fecha_fin");
+                int idHabitacion = resultSet.getInt("idHabitacion");
+                int idHuesped = resultSet.getInt("idHuesped");
+
+                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
+                Huesped huesped = huespedController.getHuespedById(idHuesped);
+                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                reservaList.add(reserva);
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return reservaList;
+    }
+
+    public boolean deleteReserva(Reserva reserva) {
+        String query = "DELETE FROM Reserva WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, reserva.getIdReserva());
+    }
+}

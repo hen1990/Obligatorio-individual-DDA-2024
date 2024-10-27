@@ -4,19 +4,31 @@ public class Reserva {
     private int idReserva;
     private int cantidadPersonas;
     private String fechaReserva;
+    private double tarifa;
     private String fechaInicio;
     private String fechaFin;
-    private String observacion;
-    private Huesped huesped;  // Cambiado de idHuesped a Huesped
+    private Habitacion habitacion;
+    private Huesped huesped;
 
     // Constructor
-    public Reserva(int idReserva, int cantidadPersonas, String fechaReserva, String fechaInicio, String fechaFin, String observacion, Huesped huesped) {
+    public Reserva(int idReserva, int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin, Habitacion habitacion, Huesped huesped) {
         this.idReserva = idReserva;
         this.cantidadPersonas = cantidadPersonas;
         this.fechaReserva = fechaReserva;
+        this.tarifa = tarifa;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.observacion = observacion;
+        this.habitacion = habitacion;
+        this.huesped = huesped;
+    }
+
+    public Reserva(int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin, Habitacion habitacion, Huesped huesped) {
+        this.cantidadPersonas = cantidadPersonas;
+        this.fechaReserva = fechaReserva;
+        this.tarifa = tarifa;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.habitacion = habitacion;
         this.huesped = huesped;
     }
 
@@ -36,8 +48,11 @@ public class Reserva {
     public String getFechaFin() { return fechaFin; }
     public void setFechaFin(String fechaFin) { this.fechaFin = fechaFin; }
 
-    public String getObservacion() { return observacion; }
-    public void setObservacion(String observacion) { this.observacion = observacion; }
+    public double getTarifa() { return tarifa; }
+    public void setTarifa(double tarifa) { this.tarifa = tarifa; }
+
+    public Habitacion getHabitacion() { return habitacion; }
+    public void setHabitacion(Habitacion habitacion) { this.habitacion = habitacion; }
 
     public Huesped getHuesped() { return huesped; }
     public void setHuesped(Huesped huesped) { this.huesped = huesped; }

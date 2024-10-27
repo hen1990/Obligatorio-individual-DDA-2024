@@ -11,7 +11,6 @@ public class CiudadController {
     }
 
     public List<Ciudad> getAllCiudad(){
-
         return this.ciudadDAO.getAllCiudad();
     }
 }

@@ -47,4 +47,26 @@ public class AmenitieDAO {
         }
         return amenitieList;
     }
+
+    public List<Amenitie> getAmenitieByHabitacion(int idHabitacion) {
+        String query = "SELECT a.* FROM Amenitie a INNER JOIN Habi_Amen ha " +
+                "on a.idAmenitie = ha.idAmenitie WHERE ha.idHabitacion = ?";
+
+        ResultSet resultSet = connectionDAO.executeQuery(query, idHabitacion);
+        List<Amenitie> amenitieList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("idAmenitie");
+                String nombre = resultSet.getString("nombre");
+
+                Amenitie amenitie = new Amenitie(id, nombre);
+                amenitieList.add(amenitie);
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return amenitieList;
+    }
 }

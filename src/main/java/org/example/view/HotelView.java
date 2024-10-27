@@ -1,37 +1,30 @@
 package org.example.view;
-
-import org.example.controller.CiudadController;
-import org.example.controller.HabitacionController;
 import org.example.controller.HotelController;
 import org.example.model.Ciudad;
-import org.example.model.Habitacion;
 import org.example.model.Hotel;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class HotelView {
+    String rojo = "\u001B[31m";
+    String azul = "\u001B[34m";
+    String verde = "\u001B[32m";
+    String reset = "\u001B[0m";
+
     private final Scanner scanner = new Scanner(System.in);
     private final HotelController hotelController = new HotelController();
-    private final CiudadController ciudadController = new CiudadController();
     private final CiudadView ciudadView = new CiudadView();
-    private final HabitacionController habitacionController = new HabitacionController();
 
     public void hotel() {
         boolean volver = false;
 
         while (!volver) {
-            System.out.println("MENU HOTELES");
+            System.out.println(azul + "MENU HOTELES");
             System.out.println("1 - Ingresar un Hotel.");
             System.out.println("2 - Eliminar un Hotel.");
             System.out.println("3 - Modificar un Hotel.");
-
-            System.out.println("4 - Consultar Hoteles.");
-            System.out.println("5 - Ver Hoteles.");
-            System.out.println("6 - Ver un Hotel.");
+            System.out.println("4 - Ver Hoteles.");
+            System.out.println("5 - Ver un Hotel.");
             System.out.println("0 - Volver.");
 
             String opcion = scanner.nextLine();
@@ -50,14 +43,10 @@ public class HotelView {
                     esperarEnter();
                     break;
                 case "4":
-                    consultarHotel();
-                    esperarEnter();
-                    break;
-                case "5":
                     getAllHotel();
                     esperarEnter();
                     break;
-                case "6":
+                case "5":
                     getHotelById();
                     esperarEnter();
                     break;
@@ -65,7 +54,7 @@ public class HotelView {
                     volver = true;
                     break;
                 default:
-                    System.out.println("Opción lo valida.");
+                    System.out.println(rojo + "Opción lo valida.");
                     esperarEnter();
                     break;
             }
@@ -74,12 +63,12 @@ public class HotelView {
 
     public void insertHotel() {
         try {
-            System.out.println("Ingrese los datos del Hotel a continuación:");
-            System.out.print("Ingrese el nombre: ");
+            System.out.println(reset + "Ingrese los datos del Hotel a continuación:");
+            System.out.print(reset + "Ingrese el nombre: ");
             String nombre = scanner.nextLine();
-            System.out.print("Ingrese dirección: ");
+            System.out.print(reset + "Ingrese dirección: ");
             String direccion = scanner.nextLine();
-            System.out.print("Ingrese cantidad de estrellas (entre 1 y 5): ");
+            System.out.print(reset + "Ingrese cantidad de estrellas (entre 1 y 5): ");
             int estrellas = Integer.parseInt(scanner.nextLine());
 
             Ciudad ciudad = ciudadView.seleccionarCiudad();
@@ -88,15 +77,15 @@ public class HotelView {
             boolean HotelInserted = this.hotelController.insertHotel(hotel);
 
             if (HotelInserted) {
-                System.out.println("Hotel ingresado! ");
+                System.out.println(verde + "Hotel ingresado! ");
             } else {
-                System.out.println("Ocurrió un error al ingresar el Hotel, \nvuelva a intentarlo más tarde.");
+                System.out.println(rojo + "Ocurrió un error al ingresar el Hotel, \nvuelva a intentarlo más tarde.");
             }
 
         } catch (
                 Exception e) {
-            System.out.println("Algo salió mal.");
-            System.out.println("1 - Volver a ingresar los datos.");
+            System.out.println(rojo + "Algo salió mal.");
+            System.out.println(azul + "1 - Volver a ingresar los datos.");
             System.out.println("2 - Volver al Inicio.");
             String opcion = scanner.nextLine();
 
@@ -105,10 +94,10 @@ public class HotelView {
                     insertHotel();
                     break;
                 case "2":
-                    System.out.println("volviendo...");
+                    System.out.println(verde + "volviendo...");
                     break;
                 default:
-                    System.out.println("Opción no válida, volviendo al Inicio.");
+                    System.out.println(rojo + "Opción no válida, volviendo al Inicio.");
                     break;
             }
         }
@@ -116,23 +105,23 @@ public class HotelView {
 
     public void getHotelById() {
         try {
-            System.out.println("Por favor, ingrese el Id del Hotel: ");
+            System.out.println(reset + "Por favor, ingrese el Id del Hotel: ");
             int opcion = Integer.parseInt(scanner.nextLine());
             Hotel hotel = hotelController.getHotelById(opcion);
 
             if (hotel == null) {
-                System.out.println("No se encontró Hotel.");
+                System.out.println(rojo + "No se encontró Hotel.");
             } else {
-                System.out.println("Nombre: " + hotel.getNombre());
-                System.out.println("Hubicaión: " +
+                System.out.println(reset + "Nombre: " + hotel.getNombre());
+                System.out.println(reset + "Hubicaión: " +
                         hotel.getCiudad().getPais().getNombre() + ", " +
                         hotel.getCiudad().getNombre() + ", " +
                         hotel.getDireccion());
-                System.out.println("Estrellas: " + hotel.getEstrellas());
-                System.out.println("__________________________________________");
+                System.out.println(reset + "Estrellas: " + hotel.getEstrellas());
+                System.out.println(reset + "__________________________________________");
             }
         } catch (Exception e) {
-            System.out.println("Opción inválida, ingrese una opción válida.");
+            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
             this.getHotelById();
         }
     }
@@ -141,19 +130,19 @@ public class HotelView {
         List<Hotel> userList = this.hotelController.getAllHotel();
 
         for (Hotel h : userList) {
-            System.out.println("Nombre: " + h.getNombre());
-            System.out.println("Hubicaión: " +
+            System.out.println(reset + "Nombre: " + h.getNombre());
+            System.out.println(reset + "Hubicaión: " +
                     h.getCiudad().getPais().getNombre() + ", " +
                     h.getCiudad().getNombre() + ", " +
                     h.getDireccion());
-            System.out.println("Estrellas: " + h.getEstrellas());
-            System.out.println("__________________________________________");
+            System.out.println(reset + "Estrellas: " + h.getEstrellas());
+            System.out.println(reset + "__________________________________________");
         }
     }
 
     public void deleteHotelById() {
         try {
-            System.out.println("Ingrese el Hotel a eliminar:");
+            System.out.println(reset + "Ingrese el Hotel a eliminar:");
             List<Hotel> hotelList = hotelController.getAllHotel();
 
             for (int i = 0; i < hotelList.size(); i++) {
@@ -170,19 +159,19 @@ public class HotelView {
             }
 
             if (hotelEliminado) {
-                System.out.println("Hotel eliminado!");
+                System.out.println(verde + "Hotel eliminado!");
             } else {
-                System.out.println("Ocurrió un error al eliminar el Hotel");
+                System.out.println(rojo + "Ocurrió un error al eliminar el Hotel");
             }
         } catch (Exception e) {
-            System.out.println("Opción inválida, ingrese una opción válida.");
+            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
             this.deleteHotelById();
         }
     }
 
     public void actualizarHotel() {
         try {
-            System.out.println("Ingrese el Hotel a actualizar:");
+            System.out.println(azul + "Ingrese el Hotel a actualizar: " + reset);
             List<Hotel> hotelList = hotelController.getAllHotel();
 
             for (int i = 0; i < hotelList.size(); i++) {
@@ -197,8 +186,8 @@ public class HotelView {
                     hotelExiste = true;
                     boolean salir = false;
                     while (!salir) {
-                        System.out.println("¿Qué dato desea modificar?");
-                        System.out.println("1 - Nombre: " + hotelList.get(i).getNombre());
+                        System.out.println(azul + "¿Qué dato desea modificar?");
+                        System.out.println(reset + "1 - Nombre: " + hotelList.get(i).getNombre());
                         System.out.println("2 - Ciudad: " + hotelList.get(i).getCiudad().getNombre());
                         System.out.println("3 - Dirección: " + hotelList.get(i).getDireccion());
                         System.out.println("4 - Estrellas: " + hotelList.get(i).getEstrellas());
@@ -240,21 +229,21 @@ public class HotelView {
                                 break;
 
                             default:
-                                System.out.println("Opción inválida, ingrese una opción válida.");
+                                System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
                                 break;
 
                         }
                         if (!salir && hotelActualizado) {
-                            System.out.println("Dato actualizado.\n");
+                            System.out.println(verde + "Dato actualizado.\n");
                         } else if (!salir) {
-                            System.out.println("No se pudo actualizar los datos.");
+                            System.out.println(rojo + "No se pudo actualizar los datos.");
                         }
                     }
                 }
             }
             if (!hotelExiste) {
-                System.out.println("No se encontró Hotel.");
-                System.out.println("1 - Volver a buscar.");
+                System.out.println(rojo + "No se encontró Hotel.");
+                System.out.println(azul + "1 - Volver a buscar.");
                 System.out.println("0 - Salir.");
                 String opcion = scanner.nextLine();
 
@@ -265,78 +254,84 @@ public class HotelView {
                     case "0":
                         break;
                     default:
-                        System.out.println("Opción no válida, volviendo al Inicio.");
+                        System.out.println(rojo + "Opción no válida, volviendo al Inicio.");
                         break;
                 }
             }
 
         } catch (Exception e) {
-            System.out.println("Opción inválida, ingrese una opción válida.");
+            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
             this.deleteHotelById();
         }
     }
 
     //Consultas_________________________________________________________________________________________________________
-    public void consultarHotel() {
+    public Hotel getHotel() {
         boolean volver = false;
+        Hotel hotel = null;
 
         while (!volver) {
-            System.out.println("CONSULTAS");
-            System.out.println("1 - Buscar Hotel por Nombre.");
+            System.out.println(azul + "1 - Buscar Hotel por Nombre.");
             System.out.println("2 - Buscar Hotel por Ciudad.");
-            System.out.println("3 - Buscar Hotel por Pais.");
-            System.out.println("4 - Buscar Hotel por Estrellas.");
+            System.out.println("3 - Buscar Hotel por Estrellas.");
+            //System.out.println("4 - Buscar Hotel por Pais.");
             System.out.println("0 - Volver.");
 
             String opcion = scanner.nextLine();
 
             switch (opcion) {
                 case "1":
-                    buscarHotelPorNombre();
+                    hotel = buscarHotelPorNombre();
+                    if (hotel != null) {volver = true;}
                     esperarEnter();
                     break;
                 case "2":
-                    buscarHotelPorCiudad();
+                    hotel = buscarHotelPorCiudad();
+                    if (hotel != null) {volver = true;}
                     esperarEnter();
                     break;
                 case "3":
-                    buscarHotelPorEstrellas();
+                    hotel = buscarHotelPorEstrellas();
+                    if (hotel != null) {volver = true;}
                     esperarEnter();
                     break;
                 case "0":
                     volver = true;
                     break;
                 default:
-                    System.out.println("Opción lo valida.");
+                    System.out.println(rojo + "Opción lo valida.");
                     esperarEnter();
                     break;
             }
         }
+        return hotel;
     }
 
-    public void buscarHotelPorNombre() {
-        System.out.println("Ingrese nombre del Hotel: ");
+    public Hotel buscarHotelPorNombre() {
+        Hotel hotel = null;
+
+        System.out.println(reset + "Ingrese nombre del Hotel: ");
         String nombre = "%" + scanner.nextLine() + "%";
         List<Hotel> hotelList = hotelController.getHotelByNombre(nombre);
 
-        System.out.println("Hoteles encontrados. Seleccione uno.");
-        for (int i = 0; i < hotelList.size(); i++) {
-            System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
-        }
+        if(!hotelList.isEmpty()) {
+            System.out.println(reset + "Hoteles encontrados. Seleccione uno.");
+            for (int i = 0; i < hotelList.size(); i++) {
+                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
+            }
 
-        int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
-        boolean hotelExiste = false;
+            int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
 
-        for (int i = 0; i < hotelList.size(); i++) {
-            if (indiceHotel == i) {
-                Hotel hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
-                hotelExiste = true;
+            for (int i = 0; i < hotelList.size(); i++) {
+                if (indiceHotel == i) {
+                    hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
+                }
             }
         }
 
-        if (!hotelExiste) {
-            System.out.println("No se encontró Hotel.");
-            System.out.println("1 - Volver a buscar.");
+        if (hotel == null) {
+            System.out.println(rojo + "No se encontró Hotel.");
+            System.out.println(azul + "1 - Volver a buscar.");
             System.out.println("0 - Salir.");
             String opcion = scanner.nextLine();
 
@@ -347,151 +342,99 @@ public class HotelView {
                 case "0":
                     break;
                 default:
-                    System.out.println("Opción no válida, volviendo al Inicio.");
-                    break;
-            }
-        } else {
-            System.out.println("Haga su reserva.");
-            System.out.println("1 - Para hoy.");
-            System.out.println("2 - Ingresar fecha.");
-            String opcion = scanner.nextLine();
-            List<Habitacion> habitacionList = new ArrayList<>();
-
-            switch (opcion) {
-                case "1":
-                    LocalDate fechaActual = LocalDate.now();
-                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    String fechaFormateada = fechaActual.format(formato);
-                    String Salida = "";
-                    habitacionList = habitacionController.habitacionDisponiblePorHotel(fechaFormateada, Salida);
-                    break;
-                case "2":
-                    System.out.println("Ingrese fecha de ingreso(aaaa-mm-dd): ");
-                    String fechaInicio = scanner.nextLine();
-                    System.out.println("Ingrese fecha de salida(aaaa-mm-dd): ");
-                    String fechaSalida = scanner.nextLine();
-                    habitacionList = habitacionController.habitacionDisponiblePorHotel(fechaInicio, fechaSalida);
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
+                    System.out.println(rojo + "Opción no válida, volviendo al Inicio.");
                     break;
             }
         }
+        return hotel;
     }
 
-    public void buscarHotelPorCiudad() {
+    public Hotel buscarHotelPorCiudad() {
+        Hotel hotel = null;
+
         Ciudad ciudad = ciudadView.seleccionarCiudad();
         List<Hotel> hotelList = hotelController.getHotelByCiudad(ciudad.getIdCiudad());
-        System.out.println("Hoteles encontrados. Seleccione uno.");
-        for (int i = 0; i < hotelList.size(); i++) {
-            System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
-        }
 
-        int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
-        boolean hotelExiste = false;
+        if(!hotelList.isEmpty()) {
+            System.out.println(reset + "Hoteles encontrados. Seleccione uno.");
+            for (int i = 0; i < hotelList.size(); i++) {
+                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
+            }
 
-        for (int i = 0; i < hotelList.size(); i++) {
-            if (indiceHotel == i) {
-                Hotel hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
-                hotelExiste = true;
+            int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
+
+            for (int i = 0; i < hotelList.size(); i++) {
+                if (indiceHotel == i) {
+                    hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
+                }
             }
         }
 
-        if (!hotelExiste) {
-            System.out.println("No se encontró Hotel.");
-            System.out.println("1 - Volver a buscar.");
+        if (hotel == null) {
+            System.out.println(rojo + "No se encontró Hotel.");
+            System.out.println(azul + "1 - Volver a buscar.");
             System.out.println("0 - Salir.");
             String opcion = scanner.nextLine();
 
             switch (opcion) {
                 case "1":
-                    buscarHotelPorNombre();
+                    buscarHotelPorCiudad();
                     break;
                 case "0":
                     break;
                 default:
-                    System.out.println("Opción no válida, volviendo al Inicio.");
-                    break;
-            }
-        } else {
-            System.out.println("Haga su reserva.");
-            System.out.println("1 - Para hoy.");
-            System.out.println("2 - Ingresar fecha.");
-            String opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    //buscarHabitacionDisponible();
-                    break;
-                case "2":
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
+                    System.out.println(rojo + "Opción no válida, volviendo al Inicio.");
                     break;
             }
         }
-
-
+        return hotel;
     }
 
-    public void buscarHotelPorEstrellas() {
-        System.out.println("Ingrese cantidad de estrellas: ");
+    public Hotel buscarHotelPorEstrellas() {
+        Hotel hotel = null;
+
+        System.out.println(reset + "Ingrese cantidad de estrellas: ");
         int estrellas = Integer.parseInt(scanner.nextLine());
         List<Hotel> hotelList = hotelController.getHotelByEstrellas(estrellas);
 
-        System.out.println("Hoteles con " + estrellas + " estrellas + más. Seleccione uno.");
-        for (int i = 0; i < hotelList.size(); i++) {
-            System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
-        }
+        if(!hotelList.isEmpty()) {
+            System.out.println(reset + "Hoteles con " + estrellas + " estrellas o más. Seleccione uno.");
+            for (int i = 0; i < hotelList.size(); i++) {
+                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
+            }
 
-        int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
-        boolean hotelExiste = false;
+            int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
 
-        for (int i = 0; i < hotelList.size(); i++) {
-            if (indiceHotel == i) {
-                Hotel hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
-                hotelExiste = true;
+            for (int i = 0; i < hotelList.size(); i++) {
+                if (indiceHotel == i) {
+                    hotel = hotelController.getHotelById(hotelList.get(i).getIdHotel());
+                }
             }
         }
 
-        if (!hotelExiste) {
-            System.out.println("No se encontró Hotel.");
-            System.out.println("1 - Volver a buscar.");
+        if (hotel == null) {
+            System.out.println(rojo + "No se encontró Hotel.");
+            System.out.println(azul + "1 - Volver a buscar.");
             System.out.println("0 - Salir.");
             String opcion = scanner.nextLine();
 
             switch (opcion) {
                 case "1":
-                    buscarHotelPorNombre();
+                    buscarHotelPorEstrellas();
                     break;
                 case "0":
                     break;
                 default:
-                    System.out.println("Opción no válida, volviendo al Inicio.");
-                    break;
-            }
-        } else {
-            System.out.println("Haga su reserva.");
-            System.out.println("1 - Para hoy.");
-            System.out.println("2 - Ingresar fecha.");
-            String opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    //buscarHabitacionDisponible();
-                    break;
-                case "2":
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
+                    System.out.println(rojo + "Opción no válida, volviendo al Inicio.");
                     break;
             }
         }
+        return hotel;
     }
 
     //Esperar Enter_____________________________________________________________________________________________________
     public void esperarEnter() {
-        System.out.println("Presiona Enter para continuar...");
+        System.out.println(verde + "Presiona Enter para continuar...");
 
         if (scanner.hasNextLine()) {
             scanner.nextLine();
