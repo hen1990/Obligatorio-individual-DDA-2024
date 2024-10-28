@@ -23,6 +23,7 @@ public class HabitacionView {
     HotelController hotelController = new HotelController();
     AmenitieController amenitieController = new AmenitieController();
 
+
     public void ingresarHabitacion() {
         try {
         System.out.println(reset + "Ingrese número de Habitación: ");
@@ -142,12 +143,12 @@ public class HabitacionView {
 
         while (!habitacionExiste) {
             for (int i = 0; i < habitacionList.size(); i++) {
-                System.out.println(reset + "Nº de Habitación: " + habitacionList.get(i).getIdHabitacion());
+                System.out.println(verde + "Habitación " + habitacionList.get(i).getTipoHabitacion().getTipo() + ", Nº: " + habitacionList.get(i).getnumHabitacion());
                 System.out.println(reset + "Camas Doble: " + habitacionList.get(i).getCamasDoble());
-                System.out.println(reset + "Camas Simple: " + habitacionList.get(i).getCamasSimple());
-                System.out.println(habitacionList.get(i).getTipoHabitacion().getTipo());
+                System.out.println("Camas Simple: " + habitacionList.get(i).getCamasSimple());
+                System.out.println("Amenities: ");
                 for (Amenitie amenitie : habitacionList.get(i).getAmenitieList()) {
-                    System.out.println(reset + " - " + amenitie.getNombre());
+                    System.out.println(verde + " - " + reset + amenitie.getNombre());
                 }
                 System.out.println(reset + "Precio: $" + habitacionList.get(i).getTipoHabitacion().getTarifa().getMonto());
                 System.out.println(reset + "_______________________________________________________________");

@@ -1,7 +1,6 @@
 package org.example.view;
 import org.example.controller.AmenitieController;
 import org.example.model.Amenitie;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

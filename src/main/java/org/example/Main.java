@@ -36,7 +36,7 @@ public class Main {
                     gestionarHuesped();
                     break;
                 case "3":
-                    hacerReserva();
+                    Reserva();
                     break;
                 case "9":
                     Otros();
@@ -68,10 +68,10 @@ public class Main {
     }
 
     //Reservas__________________________________________________________________________________________________________
-    private static void hacerReserva() {
+    private static void Reserva() {
 
         limpiarConsola();
-        reservaView.insertReserva();
+        reservaView.Reserva();
         esperarEnter();
     }
 

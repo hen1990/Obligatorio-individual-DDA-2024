@@ -14,8 +14,11 @@ public class ReservaController {
     }
 
     public List<Reserva> getAllReserva(){
-
         return this.reservaDAO.getAllReserva();
+    }
+
+    public List<Reserva> getReservaByHotel(int idHotel){
+        return this.reservaDAO.getReservaByHotel(idHotel);
     }
 
     public boolean deleteReserva(Reserva reserva) {

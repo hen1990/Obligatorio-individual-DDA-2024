@@ -117,7 +117,11 @@ public class HotelView {
                         hotel.getCiudad().getPais().getNombre() + ", " +
                         hotel.getCiudad().getNombre() + ", " +
                         hotel.getDireccion());
-                System.out.println(reset + "Estrellas: " + hotel.getEstrellas());
+                System.out.print("Estrellas: " );
+                for (int j = 0; j < hotel.getEstrellas(); j++) {
+                    System.out.print("⭐");
+                };
+                System.out.println(" ");
                 System.out.println(reset + "__________________________________________");
             }
         } catch (Exception e) {
@@ -135,7 +139,11 @@ public class HotelView {
                     h.getCiudad().getPais().getNombre() + ", " +
                     h.getCiudad().getNombre() + ", " +
                     h.getDireccion());
-            System.out.println(reset + "Estrellas: " + h.getEstrellas());
+            System.out.print("Estrellas: " );
+            for (int j = 0; j < h.getEstrellas(); j++) {
+                System.out.print("⭐");
+            };
+            System.out.println(" ");
             System.out.println(reset + "__________________________________________");
         }
     }
@@ -318,6 +326,10 @@ public class HotelView {
             System.out.println(reset + "Hoteles encontrados. Seleccione uno.");
             for (int i = 0; i < hotelList.size(); i++) {
                 System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
+                System.out.print("Estrellas: " );
+                for (int j = 0; j < hotelList.get(i).getEstrellas(); j++) {
+                    System.out.println("⭐");
+                };
             }
 
             int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
