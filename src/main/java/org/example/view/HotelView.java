@@ -19,11 +19,11 @@ public class HotelView {
         boolean volver = false;
 
         while (!volver) {
-            System.out.println(azul + "MENU HOTELES");
+            System.out.println(azul + "GESTIONAR HOTELES");
             System.out.println("1 - Ingresar un Hotel.");
             System.out.println("2 - Eliminar un Hotel.");
             System.out.println("3 - Modificar un Hotel.");
-            System.out.println("4 - Ver Hoteles.");
+            System.out.println("4 - Ver todos los Hoteles.");
             System.out.println("5 - Ver un Hotel.");
             System.out.println("0 - Volver.");
 
@@ -282,7 +282,6 @@ public class HotelView {
             System.out.println(azul + "1 - Buscar Hotel por Nombre.");
             System.out.println("2 - Buscar Hotel por Ciudad.");
             System.out.println("3 - Buscar Hotel por Estrellas.");
-            //System.out.println("4 - Buscar Hotel por Pais.");
             System.out.println("0 - Volver.");
 
             String opcion = scanner.nextLine();
@@ -323,13 +322,15 @@ public class HotelView {
         List<Hotel> hotelList = hotelController.getHotelByNombre(nombre);
 
         if(!hotelList.isEmpty()) {
-            System.out.println(reset + "Hoteles encontrados. Seleccione uno.");
+            System.out.println(reset + "Hoteles encontrados. Seleccione uno.\n");
             for (int i = 0; i < hotelList.size(); i++) {
                 System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
                 System.out.print("Estrellas: " );
                 for (int j = 0; j < hotelList.get(i).getEstrellas(); j++) {
-                    System.out.println("⭐");
+                    System.out.print("⭐");
                 };
+                System.out.println(" ");
+                System.out.println("___________________________________________________________________________");
             }
 
             int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
@@ -368,10 +369,17 @@ public class HotelView {
         List<Hotel> hotelList = hotelController.getHotelByCiudad(ciudad.getIdCiudad());
 
         if(!hotelList.isEmpty()) {
-            System.out.println(reset + "Hoteles encontrados. Seleccione uno.");
+            System.out.println(reset + "Hoteles encontrados. Seleccione uno.\n");
             for (int i = 0; i < hotelList.size(); i++) {
-                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
+                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
+                System.out.print("Estrellas: " );
+                for (int j = 0; j < hotelList.get(i).getEstrellas(); j++) {
+                    System.out.print("⭐");
+                };
+                System.out.println(" ");
+                System.out.println("___________________________________________________________________________");
             }
+
 
             int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
 
@@ -410,10 +418,17 @@ public class HotelView {
         List<Hotel> hotelList = hotelController.getHotelByEstrellas(estrellas);
 
         if(!hotelList.isEmpty()) {
-            System.out.println(reset + "Hoteles con " + estrellas + " estrellas o más. Seleccione uno.");
+            System.out.println(reset + "Hoteles encontrados. Seleccione uno.\n");
             for (int i = 0; i < hotelList.size(); i++) {
-                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre() + ", " + hotelList.get(i).getCiudad().getNombre());
+                System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
+                System.out.print("Estrellas: " );
+                for (int j = 0; j < hotelList.get(i).getEstrellas(); j++) {
+                    System.out.print("⭐");
+                };
+                System.out.println(" ");
+                System.out.println("___________________________________________________________________________");
             }
+
 
             int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
 

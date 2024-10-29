@@ -62,6 +62,34 @@ public class HuespedDAO {
         return null;
     }
 
+    public List<Huesped> getHuespedByNombre(String nombreHuesped) {
+        String query = "SELECT * FROM Huesped WHERE nombre like ? OR ap_paterno like ? OR ap_materno like ?";
+        ResultSet resultSet = connectionDAO.executeQuery(query, nombreHuesped, nombreHuesped, nombreHuesped);
+
+        List<Huesped> huespedList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("idHuesped");
+                String nombre = resultSet.getString("nombre");
+                String apPaterno = resultSet.getString("ap_paterno");
+                String apMaterno = resultSet.getString("ap_materno");
+                String numDocumento = resultSet.getString("num_documento");
+                String fechaNacimiento = resultSet.getString("fecha_nacimiento");
+                String telefono = resultSet.getString("telefono");
+                int idPais = resultSet.getInt("idPais");
+                int idTipoDocumento = resultSet.getInt("idTipoDocumento");
+
+                Pais pais = paisController.getPaisById(idPais);
+                TipoDocumento tipoDocumento = tipoDocumentoController.getTipoDocumentoById(idTipoDocumento);
+                Huesped huesped = new Huesped(id, nombre, apPaterno, apMaterno, numDocumento, fechaNacimiento, telefono, pais, tipoDocumento);
+                huespedList.add(huesped);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return huespedList;
+    }
+
     public List<Huesped> getAllHuesped() {
         String query = "SELECT * FROM Huesped";
 

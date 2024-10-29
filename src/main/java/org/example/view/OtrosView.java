@@ -31,7 +31,6 @@ public class OtrosView {
             System.out.println("6 - Ver Todos los Paices.");
             System.out.println("7 - Buscar una Ciudad.");
             System.out.println("8 - Ver todas las Ciudades.");
-            System.out.println("9 - Gestionar Habitación.");
             System.out.println("0 - Volver.");
 
             String opcion = scanner.nextLine();
@@ -62,11 +61,7 @@ public class OtrosView {
                 case "8":
                     getAllCiudad();
                     break;
-                case "9":
-                    gestionarHabitacion();
-                    break;
                 case "0":
-                    System.out.println(verde + "Saliendo...");
                     salir = true;
                     break;
                 default:
@@ -136,39 +131,6 @@ public class OtrosView {
     private void getCiudadById() {
         ciudadView.getCiudadById();
         esperarEnter();
-    }
-
-    //Habitacion________________________________________________________________________________________________________
-    private void gestionarHabitacion() {
-        boolean salir = false;
-
-        while (!salir) {
-            System.out.println(azul + "Gestionar Habitación:");
-            System.out.println("1 - Ingresar una Habitación.");
-            System.out.println("2 - Actualizar una Habitación.");
-
-            System.out.println("0 - Salir.");
-
-            String opcion = scanner.nextLine();
-
-
-            switch (opcion) {
-                case "1":
-                    habitacionView.ingresarHabitacion();
-                    break;
-                case "2":
-                    //habitacionView.actualizarHabitacion();
-                    break;
-                case "0":
-                    System.out.println(verde + "Saliendo...");
-                    salir = true;
-                    break;
-                default:
-                    System.out.println(rojo + "Opción lo valida.");
-                    esperarEnter();
-                    break;
-            }
-        }
     }
 
     //Esperar Enter_____________________________________________________________________________________________________

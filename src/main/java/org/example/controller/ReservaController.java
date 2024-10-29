@@ -17,11 +17,19 @@ public class ReservaController {
         return this.reservaDAO.getAllReserva();
     }
 
+    public List<Reserva> getReservaByHuesped(int idHuesped){
+        return this.reservaDAO.getReservaByHuesped(idHuesped);
+    }
+
     public List<Reserva> getReservaByHotel(int idHotel){
         return this.reservaDAO.getReservaByHotel(idHotel);
     }
 
-    public boolean deleteReserva(Reserva reserva) {
-        return  reservaDAO.deleteReserva(reserva);
+    public List<Reserva> getReservaByFecha(String fechaInicio, String fechaFin){
+        return this.reservaDAO.getReservaByFecha(fechaInicio, fechaFin);
+    }
+
+    public boolean deleteReserva(int idReserva) {
+        return  reservaDAO.deleteReserva(idReserva);
     }
 }

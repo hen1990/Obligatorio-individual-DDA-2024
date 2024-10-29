@@ -24,9 +24,8 @@ public class HuespedView {
             System.out.println("1 - Ingresar un Huesped.");
             System.out.println("2 - Eliminar un Huesped.");
             System.out.println("3 - Modificar un Huesped.");
-
-            System.out.println("5 - Ver Huespedes.");
-            System.out.println("6 - Ver un Huesped.");
+            System.out.println("4 - Ver un Huesped.");
+            System.out.println("5 - Ver Todos los Huespedes.");
             System.out.println("0 - Volver.");
 
             String opcion = scanner.nextLine();
@@ -44,12 +43,12 @@ public class HuespedView {
                     actualizarHuesped();
                     esperarEnter();
                     break;
-                case "5":
-                    getAllHuesped();
+                case "4":
+                    getHuesped();
                     esperarEnter();
                     break;
-                case "6":
-                    getHuespedById();
+                case "5":
+                    getAllHuesped();
                     esperarEnter();
                     break;
                 case "0":
@@ -187,6 +186,29 @@ public class HuespedView {
         }
     }
 
+    public  void getHuesped() {
+        System.out.println(azul + "BUSCAR HUESPED");
+        System.out.println("1 - Buscar Huesped por ID.");
+        System.out.println("2 - Buscar Huesped por Nombre.");
+        System.out.println("0 - Volver.");
+
+        String opcion = scanner.nextLine();
+
+        switch (opcion) {
+            case "1":
+                getHuespedById();
+                break;
+            case "2":
+                getHuespedByNombre();
+                break;
+            case "0":
+                break;
+            default:
+                System.out.println(rojo + "Opción lo valida.");
+                esperarEnter();
+                break;
+        }
+    }
     public void getHuespedById() {
         try {
             System.out.println(reset + "Por favor, ingrese el Id del Huesped: ");
@@ -202,6 +224,33 @@ public class HuespedView {
                 System.out.println("Fecha de nacimiento: " + huesped.getFechaNacimiento());
                 System.out.println("País: " + huesped.getPais().getNombre());
                 System.out.println("__________________________________________");
+            }
+        } catch (Exception e) {
+            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
+            this.getHuespedById();
+        }
+    }
+
+    public void getHuespedByNombre() {
+        try {
+            System.out.println(reset + "Por favor, ingrese Nombre o Apellido del Huesped: ");
+            String opcion = scanner.nextLine();
+            String nombreABuscar = "%" + opcion + "%";
+            List<Huesped>  huespedList = huespedController.getHuespedByNombre(nombreABuscar);
+
+            if (huespedList.isEmpty()) {
+                System.out.println(rojo + "No se encontró Huesped.");
+            } else {
+                System.out.println("Huespedes Encontrados: ");
+
+                for (Huesped huesped : huespedList) {
+                    System.out.println(reset + "Nombre Completo: " + huesped.getNombre() + " " + huesped.getApPaterno() + " " + huesped.getApMaterno());
+                    System.out.println(huesped.getTipoDocumento().getNombre() + ": " + huesped.getNumDocumento());
+                    System.out.println("Teléfono: " + huesped.getTelefono());
+                    System.out.println("Fecha de nacimiento: " + huesped.getFechaNacimiento());
+                    System.out.println("País: " + huesped.getPais().getNombre());
+                    System.out.println("__________________________________________");
+                }
             }
         } catch (Exception e) {
             System.out.println(rojo + "Opción inválida, ingrese una opción válida.");

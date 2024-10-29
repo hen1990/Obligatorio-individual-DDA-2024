@@ -14,6 +14,10 @@ public class HuespedController {
         return this.huespedDAO.getHuespedById(idHuesped);
     }
 
+    public List<Huesped> getHuespedByNombre(String nombreHuesped) {
+        return this.huespedDAO.getHuespedByNombre(nombreHuesped);
+    }
+
     public List<Huesped> getAllHuesped(){
         return this.huespedDAO.getAllHuesped();
     }
