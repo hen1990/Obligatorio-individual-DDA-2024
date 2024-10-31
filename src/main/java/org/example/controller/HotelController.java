@@ -34,6 +34,14 @@ public class HotelController {
         return this.hotelDAO.deleteHotel(idHotel);
     }
 
+    public boolean deleteHabitacionesDeUnHotel(int idHotel){
+        return this.hotelDAO.deleteHabitacionesDeUnHotel(idHotel);
+    }
+
+    public boolean deleteAmenitiesDeHabitacionesDeUnHotel(int idHabitacion){
+        return this.hotelDAO.deleteAmenitiesDeHabitacionesDeUnHotel(idHabitacion);
+    }
+
     public  boolean actualizarNombreHotel(String nombre, int idHotel) {
         return this.hotelDAO.actualizarNombreHotel(nombre, idHotel);
     }

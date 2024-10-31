@@ -9,7 +9,7 @@ public class Habitacion {
     private int numHabitacion;
     private int camasSimple;
     private int camasDoble;
-    private boolean ocupada;
+    private boolean ocupada = false;
     private Hotel hotel;
     private TipoHabitacion tipoHabitacion;
     private List<Amenitie> amenitieList = new ArrayList<>();

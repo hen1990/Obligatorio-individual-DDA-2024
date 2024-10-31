@@ -1,6 +1,8 @@
 package org.example.view;
+import org.example.controller.HabitacionController;
 import org.example.controller.HotelController;
 import org.example.model.Ciudad;
+import org.example.model.Habitacion;
 import org.example.model.Hotel;
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +16,7 @@ public class HotelView {
     private final Scanner scanner = new Scanner(System.in);
     private final HotelController hotelController = new HotelController();
     private final CiudadView ciudadView = new CiudadView();
+    HabitacionController habitacionController = new HabitacionController();
 
     public void hotel() {
         boolean volver = false;
@@ -162,6 +165,12 @@ public class HotelView {
 
             for (int i = 0; i < hotelList.size(); i++) {
                 if (indiceHotel == i) {
+                    List<Habitacion> habitacionList = habitacionController.getHabitacionByHotel(hotelList.get(i).getIdHotel());
+                    for (Habitacion habitacion : habitacionList) {
+                        this.hotelController.deleteAmenitiesDeHabitacionesDeUnHotel(habitacion.getIdHabitacion());
+                    }
+
+                    this.hotelController.deleteHabitacionesDeUnHotel(hotelList.get(i).getIdHotel());
                     hotelEliminado = this.hotelController.deleteHotel(hotelList.get(i).getIdHotel());
                 }
             }
@@ -322,7 +331,7 @@ public class HotelView {
         List<Hotel> hotelList = hotelController.getHotelByNombre(nombre);
 
         if(!hotelList.isEmpty()) {
-            System.out.println(reset + "Hoteles encontrados. Seleccione uno.\n");
+            System.out.println(reset + "\nHoteles encontrados. Seleccione uno.\n");
             for (int i = 0; i < hotelList.size(); i++) {
                 System.out.println((i + 1) + " - " + hotelList.get(i).getNombre()  + ", " + hotelList.get(i).getCiudad().getPais().getNombre()+ ", " + hotelList.get(i).getCiudad().getNombre());
                 System.out.print("Estrellas: " );

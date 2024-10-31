@@ -1,9 +1,11 @@
 package org.example.view;
+
 import org.example.controller.AmenitieController;
 import org.example.controller.HabitacionController;
 import org.example.controller.HotelController;
 import org.example.controller.TipoHabitacionController;
 import org.example.model.*;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,8 +32,11 @@ public class HabitacionView {
             System.out.println("3 - Eliminar una Habitación.");
             System.out.println("4 - Habitaciones Ocupadas.");
             System.out.println("5 - Habitaciones Desocupadas.");
-            System.out.println("6 - Ver una Habitación por ID.");
-            System.out.println("7 - Ver todas las Habitaciones.");
+            System.out.println("6 - Cambiar Estado de Habitaciones.");
+            System.out.println("7 - Havitaciones con reservas.");
+            System.out.println("8 - Havitaciones con reservas.");
+            System.out.println("9 - Ver una Habitación por ID.");
+            System.out.println("10 - Ver todas las Habitaciones.");
 
             System.out.println("0 - Salir.");
 
@@ -60,10 +65,22 @@ public class HabitacionView {
                     esperarEnter();
                     break;
                 case "6":
-                    getHabitacionById();
+                    cambiarEstadoHabitacionComo();
                     esperarEnter();
                     break;
                 case "7":
+                    getHabitacionConReservas();
+                    esperarEnter();
+                    break;
+                case "8":
+                    getHabitacionSinReservas();
+                    esperarEnter();
+                    break;
+                case "9":
+                    getHabitacionById();
+                    esperarEnter();
+                    break;
+                case "10":
                     getAllHabitacion();
                     esperarEnter();
                     break;
@@ -98,7 +115,7 @@ public class HabitacionView {
                     System.out.println("________________________________________________________________________");
                 }
 
-                int idTipoHabitacion = Integer.parseInt(scanner.nextLine()) -1;
+                int idTipoHabitacion = Integer.parseInt(scanner.nextLine()) - 1;
 
                 for (int i = 0; i < tipoHabitacionList.size(); i++) {
                     if (idTipoHabitacion == i) {
@@ -281,6 +298,68 @@ public class HabitacionView {
         }
     }
 
+    public void cambiarEstadoHabitacionComo() {
+        try {
+            System.out.println(azul + "Buscar Habitación a actualizar:");
+            System.out.println(reset + "Elija un Hotel:");
+            Hotel hotel = hotelView.getHotel();
+
+            Habitacion habitacion = seleccionarHabitacionByHotel(hotel.getIdHotel());
+
+            System.out.println("Habitación Nº" + habitacion.getnumHabitacion());
+            System.out.print("Estado actual: ");
+            if (habitacion.isOcupada()) {
+                System.out.println("Ocupada");
+            } else {
+                System.out.println("Disponible");
+            }
+
+            System.out.print("Cambiar estado a: ");
+            if (habitacion.isOcupada()) {
+                System.out.println("Disponible? (y/n): º");
+            } else {
+                System.out.println("Ocupada? (y/n): ");
+            }
+
+            String opcion = scanner.nextLine();
+
+            boolean salir = false;
+            while (!salir) {
+                switch (opcion) {
+                    case "y":
+                        boolean actualizarDisponibilidad = habitacionController.actualizarDisponibilidad(!habitacion.isOcupada(), habitacion.getIdHabitacion());
+                        if (actualizarDisponibilidad) {
+                            System.out.println(verde + "Dato actualizado.");
+                        } else {
+                            System.out.println(rojo + "No se pudo actualizar.");
+                        }
+                        salir = true;
+                        break;
+                    case "n":
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
+                        break;
+                }
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
+            this.cambiarEstadoHabitacionComo();
+        }
+
+    }
+
+    public void getHabitacionConReservas() {
+
+    }
+
+    public void getHabitacionSinReservas() {
+
+    }
+
     public void getHabitacionById() {
         try {
             System.out.println(reset + "Por favor, ingrese el Número de Habitación: ");
@@ -402,11 +481,13 @@ public class HabitacionView {
                     System.out.println(verde + " - " + reset + amenitie.getNombre());
                 }
                 System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
-                if (habitacion.isOcupada()) {
+                if (value.isOcupada()) {
                     System.out.println(rojo + "OCUPADA");
                 } else {
                     System.out.println(verde + "DISPONIBLE");
                 }
+
+
                 System.out.println(reset + "_______________________________________________________________");
             }
 
@@ -461,10 +542,12 @@ public class HabitacionView {
                     System.out.println(verde + " - " + reset + amenitie.getNombre());
                 }
                 System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
-                if (habitacion.isOcupada()) {
-                    System.out.println(rojo + "OCUPADA");
-                } else {
-                    System.out.println(verde + "DISPONIBLE");
+                if (habitacion != null) {
+                    if (habitacion.isOcupada()) {
+                        System.out.println(rojo + "OCUPADA");
+                    } else {
+                        System.out.println(verde + "DISPONIBLE");
+                    }
                 }
                 System.out.println(reset + "_______________________________________________________________");
             }

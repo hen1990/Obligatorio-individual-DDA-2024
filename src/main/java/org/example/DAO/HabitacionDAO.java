@@ -113,7 +113,7 @@ public class HabitacionDAO {
     }
 
     public List<Habitacion> getHabitacionByHotel(int idHotel) {
-        String query = "SELECT * WHERE idHotel = ?";
+        String query = "SELECT * FROM Habitacion WHERE idHotel = ?";
         ResultSet resultSet = connectionDAO.executeQuery(query, idHotel);
         List<Habitacion> habitacionList = new ArrayList<>();
 
@@ -170,14 +170,17 @@ public class HabitacionDAO {
     }
 
     public List<Habitacion> habitacionDisponiblePorHotelFecha(int idHotel, String fechaInicio, String fechaFin){
-        String query = "SELECT * FROM Habitacion h\n" +
-                "WHERE h.idHotel = ?\n" +
-                "AND h.idHabitacion NOT IN (\n" +
-                "    SELECT r.idHabitacion FROM Reserva r\n" +
-                "    WHERE  (? BETWEEN r.fecha_inicio AND r.fecha_fin)\n" +
-                "        OR (? BETWEEN r.fecha_inicio AND r.fecha_fin)\n" +
-                "        OR (r.fecha_inicio BETWEEN ? AND ?)\n" +
-                "        OR (r.fecha_fin BETWEEN ? AND ?))";
+        String query = "SELECT * FROM Habitacion h WHERE h.idHotel = ? " +
+                "AND NOT EXISTS ( SELECT * " +
+                "FROM ReservaHabitacion rh INNER JOIN Reserva r " +
+                "ON rh.idReserva = r.idReserva " +
+                "    AND ( " +
+                "        (? BETWEEN r.fecha_inicio AND r.fecha_fin) " +
+                "        OR (? BETWEEN r.fecha_inicio AND r.fecha_fin) " +
+                "        OR (r.fecha_inicio BETWEEN ? AND ?) " +
+                "        OR (r.fecha_fin BETWEEN ? AND ?) " +
+                "    ) " +
+                ")";
         ResultSet resultSet = connectionDAO.executeQuery(query, idHotel, fechaInicio, fechaFin, fechaInicio, fechaFin, fechaInicio, fechaFin);
         List<Habitacion> habitacionList = new ArrayList<>();
 
@@ -207,9 +210,10 @@ public class HabitacionDAO {
 
     public List<Habitacion> habitacionDisponiblePorCiudad(int idCiudad, String fechaInicio, String fechaFin){
         String query = "SELECT * FROM Habitacion h INNER JOIN Hotel ho " +
-                "ON h.idHotel = ho.idHotel " +
-                "WHERE ho.idCiudad = ? " +
-                " AND h.idHabitacion NOT IN ( " +
+                "ON h.idHotel = ho.idHotel INNER JOIN Ciudad c " +
+                "ON ho.idCiudad = c.idCiudad " +
+                "WHERE c.idCiudad = ? " +
+                "AND h.idHabitacion NOT IN ( " +
                 "    SELECT r.idHabitacion FROM Reserva r " +
                 "    WHERE  (? BETWEEN r.fecha_inicio AND r.fecha_fin) " +
                 "        OR (? BETWEEN r.fecha_inicio AND r.fecha_fin) " +
@@ -243,18 +247,12 @@ public class HabitacionDAO {
         return habitacionList;
     }
 
-    public List<Habitacion> habitacionDisponiblePorPais(int idPais, String fechaInicio, String fechaFin){
-        String query = "SELECT * FROM Habitacion h INNER JOIN Hotel ho\n" +
-                "ON h.idHotel = ho.idHotel INNER JOIN Ciudad c \n" +
-                "ON ho.idCiudad = c.idCiudad" +
-                "WHERE c.idPais = ?" +
-                "AND h.idHabitacion NOT IN (\n" +
-                "    SELECT r.idHabitacion FROM Reserva r\n" +
-                "    WHERE  (? BETWEEN r.fecha_inicio AND r.fecha_fin)\n" +
-                "        OR (? BETWEEN r.fecha_inicio AND r.fecha_fin)\n" +
-                "        OR (r.fecha_inicio BETWEEN ? AND ?)\n" +
-                "        OR (r.fecha_fin BETWEEN ? AND ?))";
-        ResultSet resultSet = connectionDAO.executeQuery(query, idPais, fechaInicio, fechaFin, fechaInicio, fechaFin, fechaInicio, fechaFin);
+    public List<Habitacion> habitacionPorReserva(int idReserva){
+        String query = "SELECT * FROM Habitacion h INNER JOIN ReservaHabitacion rh " +
+        "ON h.idHabitacion = rh.idHabitacion INNER JOIN Reserva r " +
+        "ON rh.idReserva = r.idReserva " +
+        "WHERE r.idReserva = ?";
+        ResultSet resultSet = connectionDAO.executeQuery(query, idReserva);
         List<Habitacion> habitacionList = new ArrayList<>();
 
         try {
@@ -305,6 +303,11 @@ public class HabitacionDAO {
     public boolean actualizarTipoHabitacion(int tipoHabitacion, int idHabitacion) {
         String query = "update Habitacion set idTipoHabitacion = ? WHERE idHabitacion = ?";
         return connectionDAO.executeUpdate(query, tipoHabitacion, idHabitacion);
+    }
+
+    public boolean actualizarDisponibilidad(boolean ocupada, int idHabitacion) {
+        String query = "update Habitacion set ocupada = ? WHERE idHabitacion = ?";
+        return connectionDAO.executeUpdate(query, ocupada, idHabitacion);
     }
 
 }

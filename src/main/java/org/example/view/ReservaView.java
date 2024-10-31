@@ -1,7 +1,11 @@
 package org.example.view;
+
+import org.example.controller.HabitacionController;
 import org.example.controller.ReservaController;
+import org.example.controller.ReservaHabitacionController;
 import org.example.controller.TarifaController;
 import org.example.model.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,11 +20,13 @@ public class ReservaView {
 
     Scanner scanner = new Scanner(System.in);
     ReservaController reservaController = new ReservaController();
+    ReservaHabitacionController reservaHabitacionController = new ReservaHabitacionController();
     TarifaController tarifaController = new TarifaController();
     HotelView hotelView = new HotelView();
     HabitacionView habitacionView = new HabitacionView();
     CiudadView ciudadView = new CiudadView();
     HuespedView huespedView = new HuespedView();
+    HabitacionController habitacionController = new HabitacionController();
 
     public void Reserva() {
         boolean volver = false;
@@ -127,14 +133,19 @@ public class ReservaView {
                     String fechaActual = localDate.format(dateTimeFormatter);
 
                     Reserva reserva = new Reserva(cantidadPersonas, fechaActual, tarifa.getMonto(),
-                            fechaInicio, fechaFin, habitacion, huesped);
+                            fechaInicio, fechaFin, huesped);
 
                     boolean ReservaInserted = this.reservaController.insertReserva(reserva);
+                    if(ReservaInserted) {
+                        Reserva ultimaReserva = this.reservaController.getUltimaReserva();
+                        ReservaInserted = this.reservaHabitacionController.insertReservaHabitacion(ultimaReserva.getIdReserva(), huesped.getIdHuesped());
+                    }
+
 
                     if (ReservaInserted) {
                         System.out.println(verde + "Reserva ingresada!");
                     } else {
-                         System.out.println(rojo + "Ocurrió un error al ingresar la Reserva, \nvuelva a intentarlo más tarde.");
+                        System.out.println(rojo + "Ocurrió un error al ingresar la Reserva, \nvuelva a intentarlo más tarde.");
                     }
                 }
             }
@@ -203,44 +214,49 @@ public class ReservaView {
         }
     }
 
-    public void  detallesReserva (int idReserva){
+    public void detallesReserva(int idReserva) {
         try {
             Reserva reserva = this.reservaController.getReservaById(idReserva);
+            List<Habitacion> habitacionList = this.habitacionController.habitacionPorReserva(reserva.getIdReserva());
 
-            System.out.println(azul + "Hotel: " + reserva.getHabitacion().getHotel().getNombre());
-            System.out.print(reset + reserva.getHabitacion().getHotel().getDireccion());
-            System.out.print(", " + reserva.getHabitacion().getHotel().getCiudad().getNombre());
-            System.out.println(", " + reserva.getHabitacion().getHotel().getCiudad().getPais().getNombre());
-            System.out.print("Estrellas : ");
-            for (int i = 0; i < reserva.getHabitacion().getHotel().getEstrellas(); i++) {
-                System.out.print("⭐");
-            }
-            System.out.println(" ");
-            System.out.println("Numero de Habitación : " + reserva.getHabitacion().getnumHabitacion());
-            System.out.println("Capacidad: " + (reserva.getHabitacion().getCamasSimple() + (reserva.getHabitacion().getCamasDoble()*2)) + " personas.");
-            System.out.println(" - Camas Simples: " + reserva.getHabitacion().getCamasSimple());
-            System.out.println(" - Camas Dobles: " + reserva.getHabitacion().getCamasDoble());
-            System.out.println("Amenities: ");
-            for (Amenitie amenitie : reserva.getHabitacion().getAmenitieList()) {
-                System.out.println(" - " + amenitie.getNombre());
-            }
             System.out.print(azul + "Huesped: " + reset + reserva.getHuesped().getNombre());
             System.out.print(" " + reserva.getHuesped().getApPaterno());
             System.out.println(" " + reserva.getHuesped().getApMaterno());
             System.out.println("Cantidad de Personas: " + reserva.getCantidadPersonas());
             System.out.println("Desde " + reserva.getFechaInicio() + " hasta " + reserva.getFechaFin());
             System.out.println("Reserva realizada el " + reserva.getFechaReserva());
-            System.out.println("Estado actual: ");
-            if (reserva.getHabitacion().isOcupada()) {
-                System.out.println(rojo + "Ocupada.");
-            } else {
-                System.out.println(verde + "Desocupada.");
+            for (Habitacion habitacion : habitacionList) {
+                System.out.println(azul + "Hotel: " + habitacion.getHotel().getNombre());
+                System.out.print(reset + habitacion.getHotel().getDireccion());
+                System.out.print(", " + habitacion.getHotel().getCiudad().getNombre());
+                System.out.println(", " + habitacion.getHotel().getCiudad().getPais().getNombre());
+                System.out.print("Estrellas : ");
+                for (int i = 0; i < habitacion.getHotel().getEstrellas(); i++) {
+                    System.out.print("⭐");
+                }
+                System.out.println(" ");
+                System.out.println("Numero de Habitación : " + habitacion.getnumHabitacion());
+                System.out.println("Capacidad: " + ((habitacion).getCamasSimple() + ((habitacion).getCamasDoble() * 2)) + " personas.");
+                System.out.println(" - Camas Simples: " + habitacion.getCamasSimple());
+                System.out.println(" - Camas Dobles: " + habitacion.getCamasDoble());
+                System.out.println("Amenities: ");
+                for (Amenitie amenitie : habitacion.getAmenitieList()) {
+                    System.out.println(" - " + amenitie.getNombre());
+                }
+                System.out.println("Estado actual: ");
+                if (habitacion.isOcupada()) {
+                    System.out.println(rojo + "Ocupada.");
+                } else {
+                    System.out.println(verde + "Desocupada.");
+                }
             }
+
             System.out.println(azul + "______________________________________________________________________________");
         } catch (Exception e) {
             System.out.println(rojo + "Ocurrió un error al obtener la reserva. ");
         }
     }
+
     public void getReservaById() {
         try {
             System.out.println(reset + "Ingrese ID de la Reserva: ");
@@ -407,13 +423,18 @@ public class ReservaView {
             List<Reserva> reservaList = reservaController.getReservaByHuesped(huesped.getIdHuesped());
 
             for (Reserva reserva : reservaList) {
+                List<Habitacion> habitacionList = this.habitacionController.habitacionPorReserva(reserva.getIdReserva());
                 System.out.println(reset + "Número de Reserva: " + reserva.getIdReserva());
-                System.out.println("Habitación: " + reserva.getHabitacion().getnumHabitacion());
-                System.out.println("Hotel: " + reserva.getHabitacion().getHotel().getNombre());
+                System.out.println("Habitaciones:");
+                for (Habitacion habitacion : habitacionList) {
+                    System.out.println("Habitación: " + habitacion.getnumHabitacion());
+                    System.out.println("Hotel: " + habitacion.getHotel().getNombre());
+                }
                 System.out.println("Periodo de Reserva: ");
                 System.out.println("Desde: " + reserva.getFechaInicio() + " hasta " + reserva.getFechaFin());
                 System.out.println("____________________________________________________________");
             }
+
 
             System.out.println("Ingrese número de reserva a Cancelar: ");
             int idReserva = Integer.parseInt(scanner.nextLine());
@@ -463,10 +484,13 @@ public class ReservaView {
             List<Reserva> reservaList = this.reservaController.getReservaByFecha(fechaInicio, fechaFin);
 
             for (Reserva reserva : reservaList) {
+                List<Habitacion> habitacionList = this.habitacionController.habitacionPorReserva(reserva.getIdReserva());
                 System.out.println(reset + "Número de Reserva: " + reserva.getIdReserva());
-                System.out.println("Habitación: " + reserva.getHabitacion().getnumHabitacion());
-                System.out.println("Hotel: " + reserva.getHabitacion().getHotel().getNombre());
-                System.out.println("Responsable: " + reserva.getHuesped().getNombre() + " " + reserva.getHuesped().getApPaterno() + " " + reserva.getHuesped().getApMaterno());
+                System.out.println("Habitaciones:");
+                for (Habitacion habitacion : habitacionList) {
+                    System.out.println("Habitación: " + habitacion.getnumHabitacion());
+                    System.out.println("Hotel: " + habitacion.getHotel().getNombre());
+                }
                 System.out.println("Periodo de Reserva: ");
                 System.out.println("Desde: " + reserva.getFechaInicio() + " hasta " + reserva.getFechaFin());
                 System.out.println("____________________________________________________________");
@@ -478,6 +502,7 @@ public class ReservaView {
 
             for (Reserva reserva : reservaList) {
                 if (reserva.getIdReserva() == idReserva) {
+                    this.reservaHabitacionController.deleteReservaHabitacion(reserva.getIdReserva());
                     reservaDeleted = this.reservaController.deleteReserva(reserva.getIdReserva());
                     break;
                 }

@@ -37,6 +37,10 @@ public class HabitacionController {
         return this.habitacionDAO.habitacionDisponiblePorHotelFecha(idHotel, fechaInicio, fechaFin);
     }
 
+    public List<Habitacion> habitacionPorReserva(int idReserva){
+        return this.habitacionDAO.habitacionPorReserva(idReserva);
+    }
+
     public boolean actualizarNumeroHabitacion(int numeroHabitacion, int idHabitacion) {
         return  this.habitacionDAO.actualizarNumeroHabitacion(numeroHabitacion, idHabitacion);
     }
@@ -55,5 +59,9 @@ public class HabitacionController {
 
     public boolean actualizarTipoHabitacion(int tipoHabitacion, int idHabitacion) {
         return  this.habitacionDAO.actualizarTipoHabitacion(tipoHabitacion, idHabitacion);
+    }
+
+    public boolean actualizarDisponibilidad(boolean ocupada, int idHabitacion) {
+        return  this.habitacionDAO.actualizarDisponibilidad(ocupada, idHabitacion);
     }
 }

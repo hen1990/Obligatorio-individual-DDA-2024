@@ -29,6 +29,10 @@ public class ReservaController {
         return this.reservaDAO.getReservaByFecha(fechaInicio, fechaFin);
     }
 
+    public Reserva getUltimaReserva() {
+        return reservaDAO.getUltimaReserva();
+    }
+
     public boolean deleteReserva(int idReserva) {
         return  reservaDAO.deleteReserva(idReserva);
     }

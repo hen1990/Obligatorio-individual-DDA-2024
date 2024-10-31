@@ -140,6 +140,16 @@ public class HotelDAO {
         return connectionDAO.executeUpdate(query, idHotel);
     }
 
+    public boolean deleteHabitacionesDeUnHotel(int idHotel) {
+        String query = "DELETE FROM Habitacion WHERE idHotel = ?";
+        return connectionDAO.executeUpdate(query, idHotel);
+    }
+
+    public boolean deleteAmenitiesDeHabitacionesDeUnHotel(int idHabitacion) {
+        String query = "DELETE FROM Habi_Amen WHERE idHabitacion = ?";
+        return connectionDAO.executeUpdate(query, idHabitacion);
+    }
+
     public boolean actualizarNombreHotel(String nombre, int idHotel) {
         String query = "update Hotel set nombre = ? WHERE idHotel = ?";
         return connectionDAO.executeUpdate(query, nombre, idHotel);

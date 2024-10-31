@@ -7,28 +7,25 @@ public class Reserva {
     private double tarifa;
     private String fechaInicio;
     private String fechaFin;
-    private Habitacion habitacion;
     private Huesped huesped;
 
     // Constructor
-    public Reserva(int idReserva, int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin, Habitacion habitacion, Huesped huesped) {
+    public Reserva(int idReserva, int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin, Huesped huesped) {
         this.idReserva = idReserva;
         this.cantidadPersonas = cantidadPersonas;
         this.fechaReserva = fechaReserva;
         this.tarifa = tarifa;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.habitacion = habitacion;
         this.huesped = huesped;
     }
 
-    public Reserva(int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin, Habitacion habitacion, Huesped huesped) {
+    public Reserva(int cantidadPersonas, String fechaReserva, double tarifa, String fechaInicio, String fechaFin , Huesped huesped) {
         this.cantidadPersonas = cantidadPersonas;
         this.fechaReserva = fechaReserva;
         this.tarifa = tarifa;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.habitacion = habitacion;
         this.huesped = huesped;
     }
 
@@ -50,9 +47,6 @@ public class Reserva {
 
     public double getTarifa() { return tarifa; }
     public void setTarifa(double tarifa) { this.tarifa = tarifa; }
-
-    public Habitacion getHabitacion() { return habitacion; }
-    public void setHabitacion(Habitacion habitacion) { this.habitacion = habitacion; }
 
     public Huesped getHuesped() { return huesped; }
     public void setHuesped(Huesped huesped) { this.huesped = huesped; }

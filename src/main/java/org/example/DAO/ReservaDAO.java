@@ -21,9 +21,8 @@ public class ReservaDAO {
                 " tarifa," +
                 " fecha_inicio," +
                 " fecha_fin," +
-                " idHabitacion," +
                 " idHuesped)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+                " VALUES (?, ?, ?, ?, ?, ?)";
 
         return connectionDAO.executeUpdate(query,
                 reserva.getCantidadPersonas(),
@@ -31,7 +30,6 @@ public class ReservaDAO {
                 reserva.getTarifa(),
                 reserva.getFechaInicio(),
                 reserva.getFechaFin(),
-                reserva.getHabitacion().getIdHabitacion(),
                 reserva.getHuesped().getIdHuesped());
     }
 
@@ -46,12 +44,10 @@ public class ReservaDAO {
                 double monto = resultSet.getDouble("tarifa");
                 String fechaInicio = resultSet.getString("fecha_inicio");
                 String fechaFin = resultSet.getString("fecha_fin");
-                int idHabitacion = resultSet.getInt("idHabitacion");
                 int idHuesped = resultSet.getInt("idHuesped");
 
-                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
-                return new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                return new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -72,11 +68,9 @@ public class ReservaDAO {
                 double monto = resultSet.getDouble("tarifa");
                 String fechaInicio = resultSet.getString("fecha_inicio");
                 String fechaFin = resultSet.getString("fecha_fin");
-                int idHabitacion = resultSet.getInt("idHabitacion");
 
-                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
-                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
                 reservaList.add(reserva);
             }
         } catch (SQLException e) {
@@ -101,12 +95,10 @@ public class ReservaDAO {
                 double monto = resultSet.getDouble("tarifa");
                 String fechaInicio = resultSet.getString("fecha_inicio");
                 String fechaFin = resultSet.getString("fecha_fin");
-                int idHabitacion = resultSet.getInt("idHabitacion");
                 int idHuesped = resultSet.getInt("idHuesped");
 
-                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
-                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
                 reservaList.add(reserva);
             }
         } catch (SQLException e) {
@@ -132,12 +124,10 @@ public class ReservaDAO {
                 double monto = resultSet.getDouble("tarifa");
                 String fechaInicio = resultSet.getString("fecha_inicio");
                 String fechaFin = resultSet.getString("fecha_fin");
-                int idHabitacion = resultSet.getInt("idHabitacion");
                 int idHuesped = resultSet.getInt("idHuesped");
 
-                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
-                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
                 reservaList.add(reserva);
             }
         } catch (SQLException e) {
@@ -159,12 +149,10 @@ public class ReservaDAO {
                 double monto = resultSet.getDouble("tarifa");
                 String fechaInicio = resultSet.getString("fecha_inicio");
                 String fechaFin = resultSet.getString("fecha_fin");
-                int idHabitacion = resultSet.getInt("idHabitacion");
                 int idHuesped = resultSet.getInt("idHuesped");
 
-                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
-                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, habitacion, huesped);
+                Reserva reserva = new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
                 reservaList.add(reserva);
 
             }
@@ -172,6 +160,29 @@ public class ReservaDAO {
             throw new RuntimeException(e);
         }
         return reservaList;
+    }
+
+    public Reserva getUltimaReserva() {
+        String query = "SELECT * FROM Reserva ORDER BY idReserva DESC LIMIT 1";
+        ResultSet resultSet = connectionDAO.executeQuery(query);
+
+        try {
+            if (resultSet.next()) {
+                int idReserva = resultSet.getInt("idReserva");
+                int cantidadPersonas = resultSet.getInt("cantidad_personas");
+                String fechaReserva = resultSet.getString("fecha_reserva");
+                double monto = resultSet.getDouble("tarifa");
+                String fechaInicio = resultSet.getString("fecha_inicio");
+                String fechaFin = resultSet.getString("fecha_fin");
+                int idHuesped = resultSet.getInt("idHuesped");
+
+                Huesped huesped = huespedController.getHuespedById(idHuesped);
+                return new Reserva(idReserva, cantidadPersonas, fechaReserva, monto, fechaInicio, fechaFin, huesped);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     public boolean deleteReserva(int idReserva) {
