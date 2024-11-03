@@ -1,7 +1,5 @@
 package org.example.DAO;
-import org.example.controller.HabitacionController;
 import org.example.controller.HuespedController;
-import org.example.model.Habitacion;
 import org.example.model.Huesped;
 import org.example.model.Reserva;
 import java.sql.ResultSet;
@@ -12,7 +10,6 @@ import java.util.List;
 public class ReservaDAO {
     private final ConnectionDAO connectionDAO = new ConnectionDAO();
     HuespedController huespedController = new HuespedController();
-    HabitacionController habitacionController = new HabitacionController();
 
     public boolean insertReserva(Reserva reserva) {
         String query = "INSERT INTO Reserva (" +
@@ -79,12 +76,10 @@ public class ReservaDAO {
         return reservaList;
     }
 
-    public List<Reserva> getReservaByHotel(int idHotel) {
-        String query = "SELECT * FROM Reserva r INNER JOIN Habitacion h " +
-                "ON r.idHabitacion = h.idHabitacion INNER JOIN Hotel ho " +
-                "ON h.idHotel = ho.idHotel " +
-                "WHERE ho.idHotel = ?";
-        ResultSet resultSet = connectionDAO.executeQuery(query, idHotel);
+    public List<Reserva> getReservaByHabitacion(int idHabitacion) {
+        String query = "SELECT r.* FROM Reserva r INNER JOIN ReservaHabitacion rh " +
+                "ON r.idReserva = rh.idReserva WHERE rh.idHabitacion = ?";
+        ResultSet resultSet = connectionDAO.executeQuery(query, idHabitacion);
         List<Reserva> reservaList = new ArrayList<>();
 
         try {
@@ -195,7 +190,7 @@ public class ReservaDAO {
         return connectionDAO.executeUpdate(query, cantidadPersonas, idReserva);
     }
 
-    public boolean actualizarTarifa(int tarifa, int idReserva) {
+    public boolean actualizarTarifa(double tarifa, int idReserva) {
         String query = "update Reserva set tarifa = ? WHERE idReserva = ?";
         return connectionDAO.executeUpdate(query, tarifa, idReserva);
     }
@@ -205,7 +200,7 @@ public class ReservaDAO {
         return connectionDAO.executeUpdate(query, fechaInicio, idReserva);
     }
 
-    public boolean actualizarFechaFin(int fechaFin, int idReserva) {
+    public boolean actualizarFechaFin(String fechaFin, int idReserva) {
         String query = "update Reserva set fecha_fin = ? WHERE idReserva = ?";
         return connectionDAO.executeUpdate(query, fechaFin, idReserva);
     }

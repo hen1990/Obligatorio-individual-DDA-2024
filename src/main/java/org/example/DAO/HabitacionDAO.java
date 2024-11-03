@@ -26,6 +26,11 @@ public class HabitacionDAO {
                 habitacion.getTipoHabitacion().getIdTipoHabitacion());
     }
 
+    public boolean deleteHabitacion(int idHabitacion) {
+        String query = "DELETE FROM Habitacion WHERE idHabitacion = ?";
+        return connectionDAO.executeUpdate(query, idHabitacion);
+    }
+
     public Habitacion getHabitacionById(int idHabitacion) {
         String query = "SELECT * FROM Habitacion WHERE idHabitacion = ?";
         ResultSet resultSet = connectionDAO.executeQuery(query, idHabitacion);
@@ -55,6 +60,68 @@ public class HabitacionDAO {
     public List<Habitacion> getAllHabitacionOcupadas(boolean habOcupada) {
         String query = "SELECT * FROM Habitacion WHERE ocupada = ?";
         ResultSet resultSet = connectionDAO.executeQuery(query, habOcupada);
+        List<Habitacion> habitacionList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                int idHabitacion = resultSet.getInt("idHabitacion");
+                int numHabitacion = resultSet.getInt("numHabitacion");
+                int cama_doble = resultSet.getInt("camas_doble");
+                int camas_simple = resultSet.getInt("camas_simple");
+                boolean ocupada = resultSet.getBoolean("ocupada");
+                int idHotel = resultSet.getInt("idHotel");
+                int idTipoHabitacion = resultSet.getInt("idTipoHabitacion");
+
+                List<Amenitie> amenitieList = amenitieController.getAmenitieByHabitacion(idHabitacion);
+                Hotel hotel = hotelController.getHotelById(idHotel);
+                TipoHabitacion tipoHabitacion = tipoHabitacionController.getTipoHabitacionById(idTipoHabitacion);
+
+                Habitacion habitacion = new Habitacion(idHabitacion, numHabitacion, camas_simple, cama_doble,
+                        ocupada, hotel, tipoHabitacion, amenitieList);
+                habitacionList.add(habitacion);
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return habitacionList;
+    }
+
+    public List<Habitacion> getHabitacionConReservas() {
+        String query = "SELECT * FROM Habitacion WHERE idHabitacion IN " +
+                " (SELECT idHabitacion FROM ReservaHabitacion)";
+        ResultSet resultSet = connectionDAO.executeQuery(query);
+        List<Habitacion> habitacionList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                int idHabitacion = resultSet.getInt("idHabitacion");
+                int numHabitacion = resultSet.getInt("numHabitacion");
+                int cama_doble = resultSet.getInt("camas_doble");
+                int camas_simple = resultSet.getInt("camas_simple");
+                boolean ocupada = resultSet.getBoolean("ocupada");
+                int idHotel = resultSet.getInt("idHotel");
+                int idTipoHabitacion = resultSet.getInt("idTipoHabitacion");
+
+                List<Amenitie> amenitieList = amenitieController.getAmenitieByHabitacion(idHabitacion);
+                Hotel hotel = hotelController.getHotelById(idHotel);
+                TipoHabitacion tipoHabitacion = tipoHabitacionController.getTipoHabitacionById(idTipoHabitacion);
+
+                Habitacion habitacion = new Habitacion(idHabitacion, numHabitacion, camas_simple, cama_doble,
+                        ocupada, hotel, tipoHabitacion, amenitieList);
+                habitacionList.add(habitacion);
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return habitacionList;
+    }
+
+    public List<Habitacion> getHabitacionSinReservas() {
+        String query = "SELECT * FROM Habitacion WHERE idHabitacion " +
+                " NOT IN ( SELECT idHabitacion FROM ReservaHabitacion)";
+        ResultSet resultSet = connectionDAO.executeQuery(query);
         List<Habitacion> habitacionList = new ArrayList<>();
 
         try {

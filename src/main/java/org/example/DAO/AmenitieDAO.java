@@ -1,8 +1,5 @@
 package org.example.DAO;
-
 import org.example.model.Amenitie;
-import org.example.model.TipoDocumento;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

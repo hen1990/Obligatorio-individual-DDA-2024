@@ -1,8 +1,8 @@
 package org.example.view;
-
 import org.example.controller.*;
 import org.example.model.*;
 
+import javax.management.MBeanServerDelegate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -148,7 +148,6 @@ public class ReservaView {
                             ReservaInserted = this.reservaHabitacionController.insertReservaHabitacion(ultimaReserva.getIdReserva(), h.getIdHabitacion());
                         }
                     }
-
 
                     if (ReservaInserted) {
                         System.out.println(verde + "Reserva ingresada!");
@@ -407,8 +406,10 @@ public class ReservaView {
 
                 for (Reserva reserva : reservaList) {
                     if (reserva.getIdReserva() == idReserva) {
-                        this.reservaHabitacionController.deleteReservaHabitacion(reserva.getIdReserva());
-                        reservaDeleted = this.reservaController.deleteReserva(reserva.getIdReserva());
+                        boolean reservaHabitacionEliminada = this.reservaHabitacionController.deleteReservaHabitacion(reserva.getIdReserva());
+                        if (reservaHabitacionEliminada) {
+                            reservaDeleted = this.reservaController.deleteReserva(reserva.getIdReserva());
+                        }
                         break;
                     }
                 }
@@ -543,7 +544,9 @@ public class ReservaView {
                 }
 
                 if (reservaList.isEmpty()) {
-                    System.out.println("No se encontraron reservas para este Huesped.");
+                    if (!volver) {
+                        System.out.println("No se encontraron reservas para este Huesped.");
+                    }
                 } else {
                     for (Reserva reserva : reservaList) {
                         System.out.println(azul + "\n Responsable: " + reserva.getHuesped().getNombre() + " " + reserva.getHuesped().getApPaterno() + " " + reserva.getHuesped().getApMaterno());
@@ -577,6 +580,7 @@ public class ReservaView {
                                 System.out.println("0 - Salir.");
                                 String opcionModificar = scanner.nextLine();
                                 boolean reservaActualizada = false;
+                                double tarifa = reserva.getTarifa();
 
                                 switch (opcionModificar) {
                                     case "1":
@@ -603,7 +607,7 @@ public class ReservaView {
                                     case "4":
                                         System.out.print("Nuevo Fecha de salida: ");
                                         String fechaSalida = scanner.nextLine();
-                                        reservaActualizada = reservaController.actualizarFechaInicio(fechaSalida, reserva.getIdReserva());
+                                        reservaActualizada = reservaController.actualizarFechaFin(fechaSalida, reserva.getIdReserva());
                                         if (reservaActualizada) reserva.setFechaFin(fechaSalida);
                                         break;
 
@@ -611,9 +615,13 @@ public class ReservaView {
                                         System.out.println("Habitaciones:");
 
                                         List<Habitacion> habitacionList = this.habitacionView.seleccionarHabitacionByFecha(reserva.getFechaInicio(), reserva.getFechaFin());
+
                                         for (Habitacion habitacion : habitacionList) {
                                             reservaActualizada = this.reservaHabitacionController.insertReservaHabitacion(reserva.getIdReserva(), habitacion.getIdHabitacion());
+                                            tarifa += habitacion.getTipoHabitacion().getTarifa().getMonto();
                                         }
+                                        boolean tarifaActualizada = this.reservaController.actualizarTarifa(tarifa, reserva.getIdReserva());
+                                        reserva.setTarifa(tarifa);
                                         break;
 
                                     case "6":
@@ -625,15 +633,17 @@ public class ReservaView {
                                             System.out.println("Habitación: " + habitacion.getnumHabitacion());
                                             System.out.println("Hotel: " + habitacion.getHotel().getNombre());
                                         }
-
                                         System.out.print("Descartar Habitación: ");
                                         int numeroHabitacion = Integer.parseInt(scanner.nextLine());
+                                        tarifa = reserva.getTarifa();
 
                                         for (Habitacion habitacion : habitacionListSeleccionadas) {
                                             if (habitacion.getnumHabitacion() == numeroHabitacion) {
                                                 reservaActualizada = reservaHabitacionController.deleteReservaHabitacionByIdReservaIdHabitacion(reserva.getIdReserva(), habitacion.getIdHabitacion());
+                                                tarifa -= habitacion.getTipoHabitacion().getTarifa().getMonto();
                                             }
                                         }
+                                        reserva.setTarifa(tarifa);
 
                                         break;
 
@@ -653,7 +663,7 @@ public class ReservaView {
                                 }
                             }
                         } else {
-                            System.out.println(rojo + "No se encontró reserva.");
+                            System.out.println(verde + "Saliendo.");
                             esperarEnter();
                         }
                     }

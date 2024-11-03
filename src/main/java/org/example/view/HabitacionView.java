@@ -1,9 +1,6 @@
 package org.example.view;
 
-import org.example.controller.AmenitieController;
-import org.example.controller.HabitacionController;
-import org.example.controller.HotelController;
-import org.example.controller.TipoHabitacionController;
+import org.example.controller.*;
 import org.example.model.*;
 
 import java.util.ArrayList;
@@ -22,6 +19,8 @@ public class HabitacionView {
     HotelController hotelController = new HotelController();
     HotelView hotelView = new HotelView();
     AmenitieController amenitieController = new AmenitieController();
+    AmenitieHabitacionController amenitieHabitacionController = new AmenitieHabitacionController();
+    ReservaController reservaController = new ReservaController();
 
     public void Habitacion() {
         boolean salir = false;
@@ -34,8 +33,8 @@ public class HabitacionView {
             System.out.println("4 - Habitaciones Ocupadas.");
             System.out.println("5 - Habitaciones Desocupadas.");
             System.out.println("6 - Cambiar Estado de Habitaciones.");
-            System.out.println("7 - Habitaciones con reservas.");
-            System.out.println("8 - Habitaciones con reservas.");
+            System.out.println("7 - Habitaciones con Reservas.");
+            System.out.println("8 - Habitaciones sin Reservas.");
             System.out.println("9 - Ver una Habitación por ID.");
             System.out.println("10 - Ver todas las Habitaciones.");
 
@@ -193,9 +192,12 @@ public class HabitacionView {
                 System.out.println("3 - Cantidad de Camas Doble: " + habitacion.getCamasDoble());
                 System.out.println("4 - Hotel: " + habitacion.getHotel().getNombre());
                 System.out.println("5 - Tipo de Habitación/Tarifa: " + habitacion.getTipoHabitacion().getTipo() + ", " + habitacion.getTipoHabitacion().getTarifa().getMonto());
+                System.out.println("6 - Agregar Amenities:");
+                System.out.println("7 - Sacar Amenities:");
                 System.out.println("0 - Salir.");
                 String opcion = scanner.nextLine();
                 boolean HabitacionActualizada = false;
+                List<Amenitie> amenitieListSeleccionadas = new ArrayList<>();
 
                 switch (opcion) {
                     case "1":
@@ -260,6 +262,62 @@ public class HabitacionView {
                         }
                         break;
 
+                    case "6":
+                        System.out.println("Amenities:");
+
+                        List<Amenitie> amenitieList = this.amenitieHabitacionController.getAmenitieNotInHabitacion(habitacion.getIdHabitacion());
+                        amenitieListSeleccionadas = habitacion.getAmenitieList();
+
+                        if (amenitieList.isEmpty()) {
+                            System.out.println("No hay más Amenitie para agregar.");
+
+                        } else {
+                            for (int i = 0; i < amenitieList.size(); i++) {
+                                System.out.println((i + 1) + " - " + amenitieList.get(i).getNombre());
+                            }
+                            System.out.print("Agregar Amenitie: ");
+                            int indiceAmenitie = Integer.parseInt(scanner.nextLine()) - 1;
+
+                            for (int i = 0; i < amenitieList.size(); i++) {
+                                if (indiceAmenitie == i) {
+                                    HabitacionActualizada = this.amenitieHabitacionController.insertAmenitieHabitacion(amenitieList.get(i).getIdAmenitie(), habitacion.getIdHabitacion());
+                                    if (HabitacionActualizada) {
+                                        Amenitie amenitie = this.amenitieController.getAmenitieById(amenitieList.get(i).getIdAmenitie());
+                                        amenitieListSeleccionadas.add(amenitie);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case "7":
+                        System.out.println("Amenities:");
+
+                        amenitieListSeleccionadas = habitacion.getAmenitieList();
+
+                        if (amenitieListSeleccionadas.isEmpty()) {
+                            System.out.println("No hay más Amenitie para descartar.");
+
+                        } else {
+                            for (int i = 0; i < amenitieListSeleccionadas.size(); i++) {
+                                System.out.println((i + 1) + " - " + amenitieListSeleccionadas.get(i).getNombre());
+                            }
+                            System.out.print("Descartar Amenitie: ");
+                            int indexAmenitie = Integer.parseInt(scanner.nextLine()) - 1;
+
+                            for (int i = 0; i < amenitieListSeleccionadas.size(); i++) {
+                                if (indexAmenitie == i) {
+                                    HabitacionActualizada = this.amenitieHabitacionController.deleteAmenitieHabitacion(amenitieListSeleccionadas.get(i).getIdAmenitie(), habitacion.getIdHabitacion());
+                                    if (HabitacionActualizada) {
+                                        amenitieListSeleccionadas.remove(i);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
                     case "0":
                         salir = true;
                         break;
@@ -294,8 +352,7 @@ public class HabitacionView {
             }
 
         } catch (Exception e) {
-            System.out.println(rojo + "Opción inválida, ingrese una opción válida.");
-            this.actualizarHabitacion();
+            System.out.println(rojo + "No se encontró/seleccionó Habitación.");
         }
     }
 
@@ -354,11 +411,60 @@ public class HabitacionView {
     }
 
     public void getHabitacionConReservas() {
+        System.out.println(reset + "Habitaciones con Reservas");
+        List<Habitacion> habitacionList = this.habitacionController.getHabitacionConReservas();
 
+        if (!habitacionList.isEmpty()) {
+            for (Habitacion habitacion : habitacionList) {
+                System.out.println(verde + "Hotel: " + habitacion.getHotel().getNombre() + ", " + habitacion.getHotel().getCiudad().getNombre());
+                System.out.println(verde + "Habitación " + habitacion.getTipoHabitacion().getTipo() + ", Nº: " + habitacion.getnumHabitacion());
+                System.out.println(reset + "Camas Doble: " + habitacion.getCamasDoble());
+                System.out.println("Camas Simple: " + habitacion.getCamasSimple());
+                System.out.println("Amenities: ");
+                for (Amenitie amenitie : habitacion.getAmenitieList()) {
+                    System.out.println(verde + " - " + reset + amenitie.getNombre());
+                }
+                System.out.println(reset + "Precio: $" + habitacion.getTipoHabitacion().getTarifa().getMonto());
+                if (habitacion.isOcupada()) {
+                    System.out.println(rojo + "OCUPADA");
+                } else {
+                    System.out.println(verde + "DISPONIBLE");
+                }
+                System.out.println(azul + "RESERVAS: ");
+                List<Reserva> reservaList = this.reservaController.getReservaByHabitacion(habitacion.getIdHabitacion());
+                for (Reserva reserva : reservaList) {
+                    System.out.println(reset + "Periodo de la Reserva: ");
+                    System.out.println("Desde " + reserva.getFechaInicio() + " hasta " + reserva.getFechaFin());
+                    System.out.println("Huesped Responsable: " + reserva.getHuesped().getNombre() + " " + reserva.getHuesped().getApPaterno() + " " + reserva.getHuesped().getApMaterno() + "\n");
+                }
+                System.out.println(reset + "_______________________________________________________________");
+            }
+        }
     }
 
     public void getHabitacionSinReservas() {
+        System.out.println(reset + "Habitaciones con Reservas");
+        List<Habitacion> habitacionList = this.habitacionController.getHabitacionSinReservas();
 
+        if (!habitacionList.isEmpty()) {
+            for (Habitacion habitacion : habitacionList) {
+                System.out.println(verde + "Hotel: " + habitacion.getHotel().getNombre() + ", " + habitacion.getHotel().getCiudad().getNombre());
+                System.out.println(verde + "Habitación " + habitacion.getTipoHabitacion().getTipo() + ", Nº: " + habitacion.getnumHabitacion());
+                System.out.println(reset + "Camas Doble: " + habitacion.getCamasDoble());
+                System.out.println("Camas Simple: " + habitacion.getCamasSimple());
+                System.out.println("Amenities: ");
+                for (Amenitie amenitie : habitacion.getAmenitieList()) {
+                    System.out.println(verde + " - " + reset + amenitie.getNombre());
+                }
+                System.out.println(reset + "Precio: $" + habitacion.getTipoHabitacion().getTarifa().getMonto());
+                if (habitacion.isOcupada()) {
+                    System.out.println(rojo + "OCUPADA");
+                } else {
+                    System.out.println(verde + "DISPONIBLE");
+                }
+                System.out.println(reset + "_______________________________________________________________");
+            }
+        }
     }
 
     public void getHabitacionById() {
@@ -751,7 +857,36 @@ public class HabitacionView {
     }
 
     public void eliminarHabitacion() {
+        try {
+            System.out.println(azul + "Buscar Habitación a Eliminar:");
+            System.out.println(reset + "Elija un Hotel:");
+            Hotel hotel = hotelView.getHotel();
 
+            Habitacion habitacion = seleccionarHabitacionByHotel(hotel.getIdHotel());
+            List<Amenitie> amenitieList = this.amenitieController.getAmenitieByHabitacion(habitacion.getIdHabitacion());
+            boolean amenitieHabitacionEliminada = false;
+
+            if (amenitieList.isEmpty()) {
+                amenitieHabitacionEliminada = true;
+            } else {
+                amenitieHabitacionEliminada = this.amenitieHabitacionController.deleteAllAmenitieEnHabitacion(habitacion.getIdHabitacion());
+            }
+
+            if (amenitieHabitacionEliminada) {
+                boolean habitacionEliminada = this.habitacionController.deleteHabitacion(habitacion.getIdHabitacion());
+                if (habitacionEliminada) {
+                    System.out.println(verde + "Habitación Eliminada.");
+                } else {
+                    System.out.println(rojo + "No se pudo eliminar Habitación.");
+                    System.out.println(rojo + "Verifique que no tenga Reservas pendientes.");
+                }
+            } else {
+                System.out.println(rojo + "No se pudo desvincular Amenitie.");
+            }
+
+        } catch (Exception e) {
+            System.out.println(rojo + "No se encontró/seleccionó Habitación.");
+        }
     }
 
     public void esperarEnter() {

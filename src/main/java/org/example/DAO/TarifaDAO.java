@@ -1,8 +1,5 @@
 package org.example.DAO;
-
-import org.example.model.Pais;
 import org.example.model.Tarifa;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -1,8 +1,5 @@
 package org.example.controller;
-
-import org.example.DAO.ReservaDAO;
 import org.example.DAO.ReservaHabitacionDAO;
-import org.example.model.Reserva;
 
 public class ReservaHabitacionController {
     private final ReservaHabitacionDAO reservaHabitacionDAO = new ReservaHabitacionDAO();

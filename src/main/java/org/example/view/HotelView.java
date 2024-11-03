@@ -162,23 +162,31 @@ public class HotelView {
 
             int indiceHotel = Integer.parseInt(scanner.nextLine()) - 1;
             boolean hotelEliminado = false;
+            boolean habitacionElininada = false;
+            boolean amenitieEliminado = false;
+
 
             for (int i = 0; i < hotelList.size(); i++) {
                 if (indiceHotel == i) {
                     List<Habitacion> habitacionList = habitacionController.getHabitacionByHotel(hotelList.get(i).getIdHotel());
                     for (Habitacion habitacion : habitacionList) {
-                        this.hotelController.deleteAmenitiesDeHabitacionesDeUnHotel(habitacion.getIdHabitacion());
+                        amenitieEliminado = this.hotelController.deleteAmenitiesDeHabitacionesDeUnHotel(habitacion.getIdHabitacion());
                     }
 
-                    this.hotelController.deleteHabitacionesDeUnHotel(hotelList.get(i).getIdHotel());
-                    hotelEliminado = this.hotelController.deleteHotel(hotelList.get(i).getIdHotel());
+                    if (amenitieEliminado) {
+                        habitacionElininada = this.hotelController.deleteHabitacionesDeUnHotel(hotelList.get(i).getIdHotel());
+                    }
+                    if (habitacionElininada) {
+                        hotelEliminado = this.hotelController.deleteHotel(hotelList.get(i).getIdHotel());
+                    }
                 }
             }
 
             if (hotelEliminado) {
                 System.out.println(verde + "Hotel eliminado!");
             } else {
-                System.out.println(rojo + "Ocurrió un error al eliminar el Hotel");
+                System.out.println(rojo + "Ocurrió un error al eliminar el Hotel.");
+                System.out.println(reset + "VERIFICAR, que no tenga reservas pendientes.");
             }
         } catch (Exception e) {
             System.out.println(rojo + "Opción inválida, ingrese una opción válida.");

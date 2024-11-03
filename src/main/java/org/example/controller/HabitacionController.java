@@ -9,6 +9,11 @@ public class HabitacionController {
     public boolean insertHabitacion(Habitacion habitacion) {
         return  this.habitacionDAO.insertHabitacion(habitacion);
     }
+
+    public boolean deleteHabitacion(int idHabitacion) {
+        return habitacionDAO.deleteHabitacion(idHabitacion);
+    }
+
     public Habitacion getHabitacionById(int idHabitacion) {
         return  this.habitacionDAO.getHabitacionById(idHabitacion);
     }
@@ -19,6 +24,14 @@ public class HabitacionController {
 
     public List<Habitacion> getAllHabitacionOcupadas(boolean ocupada){
         return this.habitacionDAO.getAllHabitacionOcupadas(ocupada);
+    }
+
+    public List<Habitacion> getHabitacionConReservas(){
+        return this.habitacionDAO.getHabitacionConReservas();
+    }
+
+    public List<Habitacion> getHabitacionSinReservas(){
+        return this.habitacionDAO.getHabitacionSinReservas();
     }
 
     public List<Habitacion>  getHabitacionByHotel(int idHotel) {

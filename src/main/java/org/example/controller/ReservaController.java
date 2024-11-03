@@ -21,8 +21,8 @@ public class ReservaController {
         return this.reservaDAO.getReservaByHuesped(idHuesped);
     }
 
-    public List<Reserva> getReservaByHotel(int idHotel){
-        return this.reservaDAO.getReservaByHotel(idHotel);
+    public List<Reserva> getReservaByHabitacion(int idHabitacion){
+        return this.reservaDAO.getReservaByHabitacion(idHabitacion);
     }
 
     public List<Reserva> getReservaByFecha(String fechaInicio, String fechaFin){
@@ -45,11 +45,11 @@ public class ReservaController {
         return  reservaDAO.actualizarFechaInicio(fechaInicio, idReserva);
     }
 
-    public boolean actualizarFechaFin(int fechaFin, int idReserva) {
+    public boolean actualizarFechaFin(String fechaFin, int idReserva) {
         return  reservaDAO.actualizarFechaFin(fechaFin, idReserva);
     }
 
-    public boolean actualizarTarifa(int tarifa, int idReserva) {
+    public boolean actualizarTarifa(double tarifa, int idReserva) {
         return  reservaDAO.actualizarTarifa(tarifa, idReserva);
     }
 
