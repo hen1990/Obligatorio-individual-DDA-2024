@@ -189,4 +189,29 @@ public class ReservaDAO {
         String query = "DELETE FROM Reserva WHERE idReserva = ?";
         return connectionDAO.executeUpdate(query, idReserva);
     }
+
+    public boolean actualizarCantidadPersonas(int cantidadPersonas, int idReserva) {
+        String query = "update Reserva set cantidad_personas = ? WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, cantidadPersonas, idReserva);
+    }
+
+    public boolean actualizarTarifa(int tarifa, int idReserva) {
+        String query = "update Reserva set tarifa = ? WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, tarifa, idReserva);
+    }
+
+    public boolean actualizarFechaInicio(String fechaInicio, int idReserva) {
+        String query = "update Reserva set fecha_inicio = ? WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, fechaInicio, idReserva);
+    }
+
+    public boolean actualizarFechaFin(int fechaFin, int idReserva) {
+        String query = "update Reserva set fecha_fin = ? WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, fechaFin, idReserva);
+    }
+
+    public boolean actualizarHuesped(int idHuesped, int idReserva) {
+        String query = "update Reserva set idHuesped = ? WHERE idReserva = ?";
+        return connectionDAO.executeUpdate(query, idHuesped, idReserva);
+    }
 }

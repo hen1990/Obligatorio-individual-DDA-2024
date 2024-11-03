@@ -21,4 +21,9 @@ public class ReservaHabitacionDAO {
         String query = "DELETE FROM ReservaHabitacion WHERE idReserva = ?";
         return connectionDAO.executeUpdate(query, idReserva);
     }
+
+    public boolean deleteReservaHabitacionByIdReservaIdHabitacion(int idReserva, int idHabitacion) {
+        String query = "DELETE FROM ReservaHabitacion WHERE idReserva = ? AND idHabitacion = ?";
+        return connectionDAO.executeUpdate(query, idReserva, idHabitacion);
+    }
 }

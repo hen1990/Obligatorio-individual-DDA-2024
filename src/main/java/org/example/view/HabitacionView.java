@@ -6,6 +6,7 @@ import org.example.controller.HotelController;
 import org.example.controller.TipoHabitacionController;
 import org.example.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,8 +34,8 @@ public class HabitacionView {
             System.out.println("4 - Habitaciones Ocupadas.");
             System.out.println("5 - Habitaciones Desocupadas.");
             System.out.println("6 - Cambiar Estado de Habitaciones.");
-            System.out.println("7 - Havitaciones con reservas.");
-            System.out.println("8 - Havitaciones con reservas.");
+            System.out.println("7 - Habitaciones con reservas.");
+            System.out.println("8 - Habitaciones con reservas.");
             System.out.println("9 - Ver una Habitación por ID.");
             System.out.println("10 - Ver todas las Habitaciones.");
 
@@ -524,123 +525,229 @@ public class HabitacionView {
         return habitacion;
     }
 
-    public Habitacion seleccionarHabitacionByHotelFecha(int idHotel, String fechaInicio, String fechaFin) {
+    public List<Habitacion> seleccionarHabitacionByHotelFecha(int idHotel, String fechaInicio, String fechaFin) {
         System.out.println(reset + "Habitaciones Disponibles: ");
 
         List<Habitacion> habitacionList = habitacionController.habitacionDisponiblePorHotelFecha(idHotel, fechaInicio, fechaFin);
+        List<Habitacion> habitacionListSeleccionadas = new ArrayList<>();
+        boolean salir = false;
 
-        Habitacion habitacion = null;
-        boolean habitacionExiste = false;
+        while (!salir) {
+            Habitacion habitacion = null;
+            boolean habitacionExiste = false;
 
-        while (!habitacionExiste) {
-            for (Habitacion value : habitacionList) {
-                System.out.println(verde + "Habitación " + value.getTipoHabitacion().getTipo() + ", Nº: " + value.getnumHabitacion());
-                System.out.println(reset + "Camas Doble: " + value.getCamasDoble());
-                System.out.println("Camas Simple: " + value.getCamasSimple());
-                System.out.println("Amenities: ");
-                for (Amenitie amenitie : value.getAmenitieList()) {
-                    System.out.println(verde + " - " + reset + amenitie.getNombre());
+            while (!habitacionExiste) {
+                for (Habitacion value : habitacionList) {
+                    System.out.println(verde + "Habitación " + value.getTipoHabitacion().getTipo() + ", Nº: " + value.getnumHabitacion());
+                    System.out.println(reset + "Camas Doble: " + value.getCamasDoble());
+                    System.out.println("Camas Simple: " + value.getCamasSimple());
+                    System.out.println("Amenities: ");
+                    for (Amenitie amenitie : value.getAmenitieList()) {
+                        System.out.println(verde + " - " + reset + amenitie.getNombre());
+                    }
+                    System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
+                    if (habitacion != null) {
+                        if (habitacion.isOcupada()) {
+                            System.out.println(rojo + "OCUPADA");
+                        } else {
+                            System.out.println(verde + "DISPONIBLE");
+                        }
+                    }
+                    System.out.println(reset + "_______________________________________________________________");
                 }
-                System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
-                if (habitacion != null) {
-                    if (habitacion.isOcupada()) {
+
+                System.out.println(reset + "Ingrese Número de Habitación, ingrese 0 para volver: ");
+                int numeroHabitacion = Integer.parseInt(scanner.nextLine());
+
+                if (numeroHabitacion == 0) {
+                    habitacionExiste = true;
+                    salir = true;
+                } else {
+                    for (int i = 0; i < habitacionList.size(); i++) {
+                        if (numeroHabitacion == habitacionList.get(i).getnumHabitacion()) {
+                            habitacion = habitacionController.getHabitacionById(habitacionList.get(i).getIdHabitacion());
+                            if (habitacion != null) {
+                                habitacionListSeleccionadas.add(habitacion);
+                                Habitacion finalHabitacion = habitacion;
+                                habitacionList.removeIf(h -> h.getIdHabitacion() == finalHabitacion.getIdHabitacion());
+                                habitacionExiste = true;
+                            }
+                        }
+                    }
+
+                    if (!habitacionExiste) {
+                        System.out.println(rojo + "No se encontró Habitación.");
+                        System.out.println(azul + "1 - Volver a buscar.");
+                        System.out.println("2 - Salir.");
+                        String opcion = scanner.nextLine();
+
+                        switch (opcion) {
+                            case "1":
+                                break;
+                            case "2":
+                                habitacionExiste = true;
+                                break;
+                            default:
+                                System.out.println(rojo + "Opción no válida, ingrese una opción válida.");
+                                break;
+                        }
+                    } else {
+                        System.out.println(verde + "Habitación agregada.");
+                        System.out.println(reset + "Selecciona otra habitación, digita 0 para volver.");
+                    }
+                }
+            }
+        }
+        return habitacionListSeleccionadas;
+    }
+
+    public List<Habitacion> habitacionDisponiblePorCiudad(int idCiudad, String fechaInicio, String fechaFin) {
+        System.out.println(reset + "Habitaciones Disponibles: ");
+
+        List<Habitacion> habitacionList = habitacionController.habitacionDisponiblePorCiudad(idCiudad, fechaInicio, fechaFin);
+        List<Habitacion> habitacionListSeleccionadas = new ArrayList<>();
+        boolean salir = false;
+
+        while (!salir) {
+            Habitacion habitacion = null;
+            boolean habitacionExiste = false;
+
+            while (!habitacionExiste) {
+                for (Habitacion value : habitacionList) {
+                    System.out.println(verde + "Habitación " + value.getTipoHabitacion().getTipo() + ", Nº: " + value.getnumHabitacion());
+                    System.out.println(reset + "Camas Doble: " + value.getCamasDoble());
+                    System.out.println("Camas Simple: " + value.getCamasSimple());
+                    System.out.println("Amenities: ");
+                    for (Amenitie amenitie : value.getAmenitieList()) {
+                        System.out.println(verde + " - " + reset + amenitie.getNombre());
+                    }
+                    System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
+                    if (value.isOcupada()) {
                         System.out.println(rojo + "OCUPADA");
                     } else {
                         System.out.println(verde + "DISPONIBLE");
                     }
+                    System.out.println(reset + "_______________________________________________________________");
                 }
-                System.out.println(reset + "_______________________________________________________________");
-            }
 
-            System.out.println(reset + "Ingrese Número de Habitación: ");
-            int numeroHabitacion = Integer.parseInt(scanner.nextLine());
+                System.out.println(reset + "Ingrese Número de Habitación, ingrese 0 para volver: ");
+                int numeroHabitacion = Integer.parseInt(scanner.nextLine());
 
-            for (int i = 0; i < habitacionList.size(); i++) {
-                if (numeroHabitacion == habitacionList.get(i).getnumHabitacion()) {
-                    habitacion = habitacionController.getHabitacionById(habitacionList.get(i).getIdHabitacion());
-                    if (habitacion != null) {
-                        habitacionExiste = true;
+                if (numeroHabitacion == 0) {
+                    habitacionExiste = true;
+                    salir = true;
+                } else {
+                    for (int i = 0; i < habitacionList.size(); i++) {
+                        if (numeroHabitacion == habitacionList.get(i).getnumHabitacion()) {
+                            habitacion = habitacionController.getHabitacionById(habitacionList.get(i).getIdHabitacion());
+                            if (habitacion != null) {
+                                habitacionListSeleccionadas.add(habitacion);
+                                habitacionExiste = true;
+                            }
+                        }
+                    }
+
+                    if (!habitacionExiste) {
+                        System.out.println(rojo + "No se encontró Habitación.");
+                        System.out.println(azul + "1 - Volver a buscar.");
+                        System.out.println("2 - Salir.");
+                        String opcion = scanner.nextLine();
+
+                        switch (opcion) {
+                            case "1":
+                                break;
+                            case "2":
+                                habitacionExiste = true;
+                                break;
+                            default:
+                                System.out.println(rojo + "Opción no válida, ingrese una opción válida.");
+                                break;
+                        }
+                    } else {
+                        System.out.println(verde + "Habitación agregada.");
+                        System.out.println(reset + "Selecciona otra habitación, digita 0 para volver.");
                     }
                 }
             }
-
-            if (!habitacionExiste) {
-                System.out.println(rojo + "No se encontró Habitación.");
-                System.out.println(azul + "1 - Volver a buscar.");
-                System.out.println("2 - Salir.");
-                String opcion = scanner.nextLine();
-
-                switch (opcion) {
-                    case "1":
-                        break;
-                    case "2":
-                        habitacionExiste = true;
-                        break;
-                    default:
-                        System.out.println(rojo + "Opción no válida, ingrese una opción válida.");
-                        break;
-                }
-            }
         }
-        return habitacion;
+        return habitacionListSeleccionadas;
     }
 
-    public Habitacion habitacionDisponiblePorCiudad(int idCiudad, String fechaInicio, String fechaFin) {
+    public List<Habitacion> seleccionarHabitacionByFecha(String fechaInicio, String fechaFin) {
         System.out.println(reset + "Habitaciones Disponibles: ");
 
-        List<Habitacion> habitacionList = habitacionController.habitacionDisponiblePorCiudad(idCiudad, fechaInicio, fechaFin);
+        List<Habitacion> habitacionList = habitacionController.habitacionDisponiblePorFecha(fechaInicio, fechaFin);
+        List<Habitacion> habitacionListSeleccionadas = new ArrayList<>();
+        boolean salir = false;
 
-        Habitacion habitacion = null;
-        boolean habitacionExiste = false;
+        while (!salir) {
+            Habitacion habitacion = null;
+            boolean habitacionExiste = false;
 
-        while (!habitacionExiste) {
-            for (Habitacion value : habitacionList) {
-                System.out.println(verde + "Habitación " + value.getTipoHabitacion().getTipo() + ", Nº: " + value.getnumHabitacion());
-                System.out.println(reset + "Camas Doble: " + value.getCamasDoble());
-                System.out.println("Camas Simple: " + value.getCamasSimple());
-                System.out.println("Amenities: ");
-                for (Amenitie amenitie : value.getAmenitieList()) {
-                    System.out.println(verde + " - " + reset + amenitie.getNombre());
-                }
-                System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
-                if (habitacion.isOcupada()) {
-                    System.out.println(rojo + "OCUPADA");
-                } else {
-                    System.out.println(verde + "DISPONIBLE");
-                }
-                System.out.println(reset + "_______________________________________________________________");
-            }
-
-            int idHabitacion = Integer.parseInt(scanner.nextLine()) - 1;
-
-            for (int i = 0; i < habitacionList.size(); i++) {
-                if (idHabitacion == i) {
-                    habitacion = habitacionController.getHabitacionById(habitacionList.get(i).getIdHabitacion());
+            while (!habitacionExiste) {
+                for (Habitacion value : habitacionList) {
+                    System.out.println(verde + "Habitación " + value.getTipoHabitacion().getTipo() + ", Nº: " + value.getnumHabitacion());
+                    System.out.println(verde + "Hotel: " + value.getHotel().getNombre());
+                    System.out.println(reset + "Camas Doble: " + value.getCamasDoble());
+                    System.out.println("Camas Simple: " + value.getCamasSimple());
+                    System.out.println("Amenities: ");
+                    for (Amenitie amenitie : value.getAmenitieList()) {
+                        System.out.println(verde + " - " + reset + amenitie.getNombre());
+                    }
+                    System.out.println(reset + "Precio: $" + value.getTipoHabitacion().getTarifa().getMonto());
                     if (habitacion != null) {
-                        habitacionExiste = true;
+                        if (habitacion.isOcupada()) {
+                            System.out.println(rojo + "OCUPADA");
+                        } else {
+                            System.out.println(verde + "DISPONIBLE");
+                        }
+                    }
+                    System.out.println(reset + "_______________________________________________________________");
+                }
+
+                System.out.println(reset + "Ingrese Número de Habitación, ingrese 0 para volver: ");
+                int numeroHabitacion = Integer.parseInt(scanner.nextLine());
+
+                if (numeroHabitacion == 0) {
+                    habitacionExiste = true;
+                    salir = true;
+                } else {
+                    for (int i = 0; i < habitacionList.size(); i++) {
+                        if (numeroHabitacion == habitacionList.get(i).getnumHabitacion()) {
+                            habitacion = habitacionController.getHabitacionById(habitacionList.get(i).getIdHabitacion());
+                            if (habitacion != null) {
+                                habitacionListSeleccionadas.add(habitacion);
+                                Habitacion finalHabitacion = habitacion;
+                                habitacionList.removeIf(h -> h.getIdHabitacion() == finalHabitacion.getIdHabitacion());
+                                habitacionExiste = true;
+                            }
+                        }
+                    }
+
+                    if (!habitacionExiste) {
+                        System.out.println(rojo + "No se encontró Habitación.");
+                        System.out.println(azul + "1 - Volver a buscar.");
+                        System.out.println("2 - Salir.");
+                        String opcion = scanner.nextLine();
+
+                        switch (opcion) {
+                            case "1":
+                                break;
+                            case "2":
+                                habitacionExiste = true;
+                                break;
+                            default:
+                                System.out.println(rojo + "Opción no válida, ingrese una opción válida.");
+                                break;
+                        }
+                    } else {
+                        System.out.println(verde + "Habitación agregada.");
+                        System.out.println(reset + "Selecciona otra habitación, digita 0 para volver.");
                     }
                 }
             }
-
-            if (!habitacionExiste) {
-                System.out.println(rojo + "No se encontró Habitación.");
-                System.out.println(azul + "1 - Volver a buscar.");
-                System.out.println("2 - Salir.");
-                String opcion = scanner.nextLine();
-
-                switch (opcion) {
-                    case "1":
-                        break;
-                    case "2":
-                        habitacionExiste = true;
-                        break;
-                    default:
-                        System.out.println(rojo + "Opción no válida, ingrese una opción válida.");
-                        break;
-                }
-            }
         }
-        return habitacion;
+        return habitacionListSeleccionadas;
     }
 
     public void eliminarHabitacion() {

@@ -36,4 +36,24 @@ public class ReservaController {
     public boolean deleteReserva(int idReserva) {
         return  reservaDAO.deleteReserva(idReserva);
     }
+
+    public boolean actualizarCantidadPersonas(int cantidadPersonas, int idReserva) {
+        return  reservaDAO.actualizarCantidadPersonas(cantidadPersonas, idReserva);
+    }
+
+    public boolean actualizarFechaInicio(String fechaInicio, int idReserva) {
+        return  reservaDAO.actualizarFechaInicio(fechaInicio, idReserva);
+    }
+
+    public boolean actualizarFechaFin(int fechaFin, int idReserva) {
+        return  reservaDAO.actualizarFechaFin(fechaFin, idReserva);
+    }
+
+    public boolean actualizarTarifa(int tarifa, int idReserva) {
+        return  reservaDAO.actualizarTarifa(tarifa, idReserva);
+    }
+
+    public boolean actualizarHuesped(int idHuesped, int idReserva) {
+        return  reservaDAO.actualizarHuesped(idHuesped, idReserva);
+    }
 }

@@ -37,6 +37,10 @@ public class HabitacionController {
         return this.habitacionDAO.habitacionDisponiblePorHotelFecha(idHotel, fechaInicio, fechaFin);
     }
 
+    public List<Habitacion> habitacionDisponiblePorFecha(String fechaInicio, String fechaFin){
+        return this.habitacionDAO.habitacionDisponiblePorFecha(fechaInicio, fechaFin);
+    }
+
     public List<Habitacion> habitacionPorReserva(int idReserva){
         return this.habitacionDAO.habitacionPorReserva(idReserva);
     }

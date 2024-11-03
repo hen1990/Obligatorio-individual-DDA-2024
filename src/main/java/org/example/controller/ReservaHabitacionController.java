@@ -14,4 +14,8 @@ public class ReservaHabitacionController {
     public boolean deleteReservaHabitacion(int idReserva) {
         return  reservaHabitacionDAO.deleteReservaHabitacion(idReserva);
     }
+
+    public boolean deleteReservaHabitacionByIdReservaIdHabitacion(int idReserva, int idHabitacion) {
+        return  reservaHabitacionDAO.deleteReservaHabitacionByIdReservaIdHabitacion(idReserva, idHabitacion);
+    }
 }
